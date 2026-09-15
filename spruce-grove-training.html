@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>End-to-End Training — Say It, Watch It Build, Run With It · Spruce Grove OS</title>
+<link rel="icon" type="image/png" href="spruce-logos/spruce_grove_badge_ember.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600;9..144,800&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--charcoal:#1d211e;--spruce:#2d4f3a;--moss:#588f5e;--cedar:#d2a069;--stone:#d6d2c8;--mist:#f0e1c8;--line:rgba(240,225,200,.14);--card:rgba(45,79,58,.16)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:radial-gradient(1100px 500px at 18% -5%,rgba(88,143,94,.15),transparent 60%),radial-gradient(900px 480px at 92% 108%,rgba(210,160,105,.1),transparent 60%),var(--charcoal);color:var(--stone);line-height:1.65;font-size:16px}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .kicker{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.22em;font-size:.66rem;color:var(--moss)}
+  .kicker.ember{color:var(--cedar)}
+  h1{font-family:'Fraunces',serif;font-weight:800;color:var(--mist);font-size:clamp(2rem,5.5vw,3.4rem);line-height:1.1;margin:14px 0 12px}
+  h2{font-family:'Fraunces',serif;font-weight:600;color:var(--mist);font-size:1.5rem;margin:0 0 10px}
+  h3{font-size:.98rem;color:var(--mist);margin-bottom:6px}
+  .lede{max-width:720px;color:rgba(214,210,200,.85)}
+  .dim{color:rgba(214,210,200,.6)} .ember{color:var(--cedar)} .mossy{color:var(--moss)}
+  .wrap{max-width:940px;margin:0 auto;padding:0 22px;position:relative;z-index:2}
+  header.hero{padding:56px 0 26px}
+  .stamp{display:inline-block;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.16em;font-size:.66rem;color:var(--cedar);border:2px solid var(--cedar);box-shadow:3px 3px 0 rgba(210,160,105,.4);transform:rotate(-2deg);padding:7px 13px;border-radius:2px}
+  section{padding:26px 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+  .card p{font-size:.9rem;color:rgba(214,210,200,.78)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:840px){.grid2,.grid3{grid-template-columns:1fr}}
+  a{color:var(--cedar);text-decoration:none;border-bottom:1px solid rgba(210,160,105,.35)}
+  a:hover{border-bottom-color:var(--cedar)}
+  pre.term{background:rgba(29,33,30,.88);border:1px solid var(--line);border-left:3px solid var(--cedar);border-radius:10px;padding:16px 18px;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--mist);overflow-x:auto;line-height:1.7;margin:12px 0}
+  pre.term .c{color:rgba(214,210,200,.45)}
+  ol.path{list-style:none;display:grid;gap:12px;counter-reset:step;margin:16px 0}
+  ol.path li{counter-increment:step;position:relative;padding-left:52px;font-size:.94rem;color:rgba(214,210,200,.85)}
+  ol.path li::before{content:counter(step);position:absolute;left:0;top:2px;width:34px;height:34px;border-radius:10px;background:var(--spruce);border:1px solid var(--line);color:var(--mist);font-family:'Fraunces',serif;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:1rem}
+  ol.path li b{color:var(--mist)}
+  .loop{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}
+  .loop span{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:7px 14px;color:var(--moss)}
+  .loop span.ember{color:var(--cedar);border-color:rgba(210,160,105,.4)}
+  .loop i{color:var(--cedar);font-style:normal}
+  .audio-card{background:rgba(210,160,105,.06);border:1px solid rgba(210,160,105,.4);border-radius:14px;padding:22px;margin:16px 0}
+  audio{width:100%;margin-top:12px;filter:sepia(.3) hue-rotate(60deg)}
+  .became{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .became a{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:6px 13px;text-decoration:none}
+  blockquote{font-family:'Fraunces',serif;font-weight:300;font-style:italic;font-size:1.25rem;color:var(--mist);border-left:3px solid var(--cedar);padding:6px 0 6px 20px;margin:18px 0}
+  ul.tight{list-style:none;display:grid;gap:9px;margin:12px 0}
+  ul.tight li{padding-left:20px;position:relative;font-size:.92rem;color:rgba(214,210,200,.82)}
+  ul.tight li::before{content:"";position:absolute;left:0;top:.68em;width:9px;height:2px;background:var(--cedar)}
+  footer{padding:38px 0 70px;font-size:.8rem;color:rgba(214,210,200,.55)}
+  /* gate */
+  #gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:radial-gradient(900px 500px at 50% 30%,rgba(45,79,58,.5),transparent 70%),var(--charcoal);transition:opacity .7s ease,visibility 0s .7s}
+  #gate.open{opacity:0;visibility:hidden}
+  .gatebox{text-align:center;max-width:460px;padding:20px}
+  .gatebox .g{width:110px;opacity:.85;margin:0 auto 18px;display:block}
+  .gatebox input{font-family:'JetBrains Mono',monospace;font-size:1.2rem;letter-spacing:.3em;text-align:center;width:220px;background:rgba(29,33,30,.9);color:var(--mist);border:1px solid var(--line);border-radius:10px;padding:12px 10px;outline:none;text-transform:uppercase}
+  .gatebox button{display:block;margin:14px auto 0;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;color:var(--charcoal);background:var(--cedar);border:none;border-radius:10px;padding:11px 26px;cursor:pointer;font-weight:700}
+  .gate-msg{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;margin-top:14px;min-height:1.2em;color:var(--cedar)}
+  .shake{animation:shake .4s}@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+  .hintline{font-size:.82rem;color:rgba(214,210,200,.55);margin-top:12px}
+  body.locked main{display:none}
+  @media print{#gate{display:none}body.locked main{display:block}body::before{display:none}}
+</style>
+<style>
+@keyframes gfade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+main .card,main .demo,main section{animation:gfade .7s ease both}
+main .card:nth-child(2),main .demo:nth-child(2){animation-delay:.12s}
+main .card:nth-child(3),main .demo:nth-child(3){animation-delay:.24s}
+main .card:nth-child(4),main .demo:nth-child(4){animation-delay:.36s}
+main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head>
+<body class="locked">
+
+<div id="gate">
+  <div class="gatebox" id="gatebox">
+    <svg class="g" viewBox="0 0 268 160" aria-hidden="true"><g fill="#F2EDE0"><path d="M35.2 84.6 67.2 140 3.2 140Z"/><path d="M129 50.2 180.8 140 77.2 140Z"/><path d="M222.8 84.6 254.8 140 190.8 140Z"/><rect x="3.2" y="148" width="261.6" height="6"/></g></svg>
+    <div class="kicker ember">End-to-end training &middot; cut for Lock Doctor</div>
+    <h1 style="font-size:clamp(1.6rem,4vw,2.4rem)">One key turns it.</h1>
+    <input id="key" type="password" maxlength="12" autocomplete="off" placeholder="&bull;&bull;&bull;&bull;&bull;" aria-label="Key">
+    <button id="turn">Turn the key</button>
+    <div class="gate-msg" id="msg"></div>
+    <p class="hintline">Hint: the blade that starts the Bronco — five characters, starts with H.</p>
+  </div>
+</div>
+
+<main>
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker ember">End-to-end training &middot; watch, then do, then teach</div>
+    <h1>Say it out loud.<br>Watch it build. Run with it.</h1>
+    <p class="lede">This page is the whole loop, start to finish — the same loop that built every page in this package. By the end you&rsquo;ll know exactly what happens to your voice: where it goes, who sees it, what gets built, and what waits for your yes before anything moves.</p>
+    <div style="margin-top:20px"><span class="stamp">Properly &middot; securely &middot; gated at every step</span></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <div class="kicker">01 &middot; The proof, playable</div>
+  <h2>Hear the input. You&rsquo;re holding the output.</h2>
+  <p class="lede" style="margin-bottom:6px">This morning, after the crew pulled away, Tyler recorded a two-minute voice note about how to help your shop. One recording, spoken plainly, thinking out loud. Then the loop took over.</p>
+  <div class="audio-card">
+    <div class="kicker ember">The actual voice note &middot; this morning &middot; unedited</div>
+    <audio controls preload="none" src="lockdoctors-usecase-thehowithelps.m4a"></audio>
+    <p class="dim" style="font-size:.8rem;margin-top:10px">That&rsquo;s it. No script, no code, no slides — just a guy talking about keys, access, barriers, and a lock-pick he&rsquo;d like to craft and sell.</p>
+  </div>
+  <p class="lede">Here&rsquo;s what that one recording became, end to end, in one sitting:</p>
+  <div class="became">
+    <a href="lock-doctor-story.html">the explainer story &rarr;</a>
+    <a href="lock-doctor-website-plan.html">the website plan &rarr;</a>
+    <a href="lockdoctor-fpo.html">a working FPO site &rarr;</a>
+    <a href="greg-handoff.html">this whole package &rarr;</a>
+  </div>
+  <p class="lede" style="margin-top:12px">The voice note was <b>Mockingbird&rsquo;s</b> to transcribe. The plan, the writing, the builds, the gates &mdash; that was <b>Cedar</b> on the harness. Your voice in, working tools out. That&rsquo;s the entire trick, and there is no trick.</p>
+</section>
+
+<section>
+  <div class="kicker">02 &middot; The loop, with the gates visible</div>
+  <h2>What actually happens when you talk</h2>
+  <div class="loop">
+    <span>you say / record it</span><i>&rarr;</i>
+    <span>Mockingbird transcribes</span><i>&rarr;</i>
+    <span>Cedar plans in plain words</span><i>&rarr;</i>
+    <span class="ember">your yes</span><i>&rarr;</i>
+    <span>builds &amp; tests</span><i>&rarr;</i>
+    <span class="ember">your yes</span><i>&rarr;</i>
+    <span>ships locally</span><i>&rarr;</i>
+    <span>reports back</span>
+  </div>
+  <div class="grid3">
+    <div class="card"><h3>Gated, both directions</h3><p>Nothing consequential runs without a human yes &mdash; and nothing leaves without one either. Commands, file changes, sends, deploys: each one shows its plan first and waits.</p></div>
+    <div class="card"><h3>Secure by location</h3><p>Your recordings, transcripts, and tools live on your machine, in your files. Customer PII stays out of prompts by default. API keys sit in local config &mdash; never pasted into a conversation.</p></div>
+    <div class="card"><h3>Readable, always</h3><p>Every change lands in files you own and git history you can read. Nothing is a black box; if you ever wonder what happened, the answer is a file you can open.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">03 &middot; The trust part, honestly</div>
+  <h2>Uncertainty is a feature. Here&rsquo;s how to use it.</h2>
+  <p class="lede">The key to all of this is trusting the harness &mdash; and trust isn&rsquo;t built by magic, it&rsquo;s built by clarity. So the rule is simple: <span class="ember">any uncertainty Cedar has, it states out loud, and asks.</span> When it doesn&rsquo;t know which fob, which price, which door &mdash; it stops and asks instead of guessing on your behalf. That&rsquo;s not hesitation; that&rsquo;s the harness respecting the fact that it&rsquo;s <i>your</i> shop.</p>
+  <ul class="tight">
+    <li><b>It shows its plan before it acts</b> — you approve the how, not just the what.</li>
+    <li><b>It names what it doesn&rsquo;t know</b> — uncertainty is stated, never hidden in a confident guess.</li>
+    <li><b>It keeps receipts</b> — every command, every edit, reviewable after the fact in plain files.</li>
+    <li><b>It fails safe</b> — if a step can&rsquo;t be done cleanly, it stops and tells you, rather than pushing something half-broken out the door.</li>
+  </ul>
+  <blockquote>&ldquo;Once you see that the uncertainty is loud and the gates are real, the fear turns off &mdash; and the harness becomes the answer to building anything you want.&rdquo;</blockquote>
+</section>
+
+<section>
+  <div class="kicker">04 &middot; Your hands-on path</div>
+  <h2>Four steps. One evening. Then you&rsquo;re driving.</h2>
+  <ol class="path">
+    <li><b>Put the grove on your machine.</b> A Mac or PC (Linux/WSL fine), Python 3.11+. Clone, sync, wake:
+      <pre class="term"><span class="c"># the same commands that built everything in this package</span>
+git clone https://github.com/t-granlund/SPRUCE-GROVE-OS
+cd SPRUCE-GROVE-OS
+uv sync
+uv run spruce-grove</pre>
+      <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS" target="_blank" rel="noopener">the grove on GitHub &rarr;</a> &nbsp; <a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv, if you need it &rarr;</a>
+    </li>
+    <li><b>Pick a brain — one line of config.</b> Tyler&rsquo;s pick today is <a href="https://synthetic.new" target="_blank" rel="noopener">synthetic.new &rarr;</a> — tuned his way. Any provider works the same: OpenAI, Anthropic, Gemini, Bedrock, your own endpoint. Swap any time; the brain is rented, the harness is owned. Everything sensitive stays in local config, never in a prompt.</li>
+    <li><b>Say your first build out loud.</b> Record it like Tyler did this morning — plain words, thinking out loud. Or type it. Try one of the six starters in the package: the listing audit, the parts brain, the after-hours intake. Cedar will plan it, show you, and wait for your yes at every gate.</li>
+    <li><b>Run with it.</b> Change your mind mid-build — say so. Want it different — say so. The tools are MIT-licensed, the source is yours, the mirrors are yours. There is no vendor to leave, because there was never a vendor in the middle.</li>
+  </ol>
+  <div class="card cedar"><h3>The standing offer that comes with it</h3><p>Tyler sits with you or Jonah for the first build — free, whenever, voice-only if you&rsquo;d rather keep the laptop closed. And the first council of the Leather Apron Club is <b>Friday, September 18 at Bentonville Barber Company</b>: shops that run on tools the grove built, trading what works. Franklin&rsquo;s question stands: <i>how can the Junto assist you in any of your honorable designs?</i></p></div>
+</section>
+
+<section>
+  <div class="kicker">05 &middot; The links that matter</div>
+  <h2>Everything real, in one place</h2>
+  <ul class="tight">
+    <li><a href="https://github.com/t-granlund/SPRUCE-GROVE-OS" target="_blank" rel="noopener">Spruce Grove OS on GitHub</a> — the source, MIT licensed; clone it, read it, own it</li>
+    <li><a href="https://synthetic.new" target="_blank" rel="noopener">synthetic.new</a> — Tyler&rsquo;s current brain pick; any provider works, one line to swap</li>
+    <li><a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv documentation</a> — the one install tool the commands above use</li>
+    <li><a href="greg-handoff.html">The handoff package</a> — all assets, the six starter tools with copy-ready first prompts</li>
+    <li><a href="lock-doctor-website-plan.html">The website plan</a> — the live audit of lockdoctorar.com, today vs tomorrow</li>
+    <li><a href="lockdoctor-fpo.html">The FPO site</a> — tomorrow&rsquo;s website, working, clickable</li>
+  </ul>
+  <p class="dim" style="font-size:.82rem;margin-top:12px">Provenance, credit-honest: the grove is built from and import-compatible with Code Puppy by Michael Pfaffenberger — in writing, in the repo (PROVENANCE.md). MIT all the way down.</p>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="mono">Together we are better. Always. &middot; Leave everything better than you found it.</p>
+    <p style="margin-top:10px">Prepared by Tyler Granlund with Cedar &middot; Spruce Grove OS &middot; every page in this package was built by the loop this page teaches.</p>
+  </div>
+</footer>
+</div>
+</main>
+
+<script>
+(function(){
+  var GATE_KEY='hu101';
+  var gate=document.getElementById('gate'), box=document.getElementById('gatebox'),
+      input=document.getElementById('key'), msg=document.getElementById('msg'),
+      btn=document.getElementById('turn'), body=document.body;
+  var unlocked=false;
+  try{ unlocked=sessionStorage.getItem('grove-handoff-key')===GATE_KEY; }catch(e){}
+  if(unlocked){ body.classList.remove('locked'); gate.classList.add('open'); }
+  function tryKey(){
+    var v=(input.value||'').trim().toLowerCase();
+    if(v===GATE_KEY){
+      msg.textContent='Pin set. Welcome to the grove.';
+      try{ sessionStorage.setItem('grove-handoff-key',GATE_KEY); }catch(e){}
+      setTimeout(function(){ body.classList.remove('locked'); gate.classList.add('open'); },450);
+    } else {
+      msg.textContent='Not this key.';
+      box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+      input.value=''; input.focus();
+    }
+  }
+  btn.addEventListener('click',tryKey);
+  input.addEventListener('keydown',function(e){ if(e.key==='Enter') tryKey(); });
+  if(!unlocked) setTimeout(function(){ input.focus(); },300);
+})();
+</script>
+<script>
+(function(){function go(){if(document.querySelector('#grove-welcome'))return;
+var w=document.createElement('div');w.id='grove-welcome';
+w.innerHTML='Welcome, <b>Greg</b>. This one is yours &mdash; take your time.';
+w.style.cssText='position:fixed;bottom:22px;right:22px;z-index:9999;max-width:320px;padding:14px 20px;'+
+'border:1px solid rgba(228,170,113,.5);border-radius:12px;background:rgba(14,19,15,.94);color:#EEEBE2;'+
+'font:15px/1.5 Georgia,serif;box-shadow:0 12px 40px -12px rgba(0,0,0,.7);opacity:0;transition:opacity .8s';
+document.body.appendChild(w);requestAnimationFrame(function(){w.style.opacity='1'});
+setTimeout(function(){w.style.opacity='0';setTimeout(function(){w.remove()},900)},6000);}
+if(document.body.classList&&!document.body.classList.contains('locked'))go();
+else{var i=setInterval(function(){if(!document.body.classList.contains('locked')){clearInterval(i);go()}},400);
+setTimeout(function(){clearInterval(i)},60000)}})();
+</script></body>
+</html>

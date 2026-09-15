@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Every Lock Has a Key — Spruce Grove OS · presented to Lock Doctor</title>
+<link rel="icon" type="image/png" href="spruce-logos/spruce-core-disc-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600;9..144,800&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1d211e; --spruce-deep:#20392b; --spruce:#2d4f3a; --moss:#588f5e;
+    --cedar:#d2a069; --stone:#d6d2c8; --mist:#f0e1c8;
+    --line:rgba(240,225,200,.14); --card:rgba(45,79,58,.16);
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; overflow:hidden;
+    background:
+      radial-gradient(1100px 500px at 18% -5%, rgba(88,143,94,.16), transparent 60%),
+      radial-gradient(900px 480px at 92% 108%, rgba(210,160,105,.12), transparent 60%),
+      var(--charcoal);
+    color:var(--stone); line-height:1.55; font-size:16px;
+  }
+  body::before{content:""; position:fixed; inset:0; pointer-events:none; z-index:5; opacity:.045;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .kicker{font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.22em; font-size:.66rem; color:var(--moss)}
+  .kicker.ember{color:var(--cedar)}
+  h1{font-family:'Fraunces',serif; font-weight:800; color:var(--mist); font-size:clamp(2.4rem,6.5vw,4.6rem); line-height:1.05; letter-spacing:-.01em; margin:16px 0 14px}
+  h2{font-family:'Fraunces',serif; font-weight:600; color:var(--mist); font-size:clamp(1.7rem,3.6vw,2.7rem); line-height:1.12; margin:14px 0 12px}
+  .lede{max-width:640px; font-size:clamp(.95rem,1.4vw,1.06rem); color:rgba(214,210,200,.82)}
+  .dim{color:rgba(214,210,200,.62)}
+  .ember{color:var(--cedar)} .mossy{color:var(--moss)}
+
+  /* slides */
+  .slide{position:fixed; inset:0; display:flex; align-items:center; opacity:0; visibility:hidden; transition:opacity .55s ease, visibility 0s .55s}
+  .slide.active{opacity:1; visibility:visible; transition:opacity .55s ease; z-index:2}
+  .inner{width:min(1120px,92vw); margin:0 auto; padding:0 4px}
+  .r{opacity:0; transform:translateY(16px); transition:opacity .7s ease, transform .7s ease; transition-delay:var(--d,0s)}
+  .slide.active .r{opacity:1; transform:none}
+
+  /* chrome */
+  .chrome{position:fixed; z-index:6; font-size:.68rem}
+  .brand{top:20px; left:24px; display:flex; align-items:center; gap:10px; opacity:.85}
+  .brand .g{width:30px; opacity:.8}
+  .brand .word{font-family:'JetBrains Mono',monospace; font-size:.66rem; letter-spacing:.18em; color:var(--stone); text-transform:lowercase}
+  .brand .word b{color:var(--cedar)}
+  .counter{top:24px; right:24px; font-family:'JetBrains Mono',monospace; letter-spacing:.2em; color:rgba(214,210,200,.55)}
+  .pins{bottom:22px; left:50%; transform:translateX(-50%); display:flex; gap:8px; align-items:flex-end}
+  .pin{width:18px; height:3px; background:rgba(214,210,200,.25); cursor:pointer; transition:all .3s; border:none; border-radius:2px; padding:0}
+  .pin:hover{background:rgba(214,210,200,.5)}
+  .pin.on{height:9px; background:var(--cedar)}
+  .cutfor{bottom:18px; left:24px; color:rgba(214,210,200,.55); cursor:pointer; border:none; background:none; font-family:'JetBrains Mono',monospace; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase}
+  .cutfor:hover{color:var(--cedar)}
+  .anno{bottom:14px; right:20px; text-align:right; opacity:.5; pointer-events:none}
+  .anno .g{width:64px; opacity:.12; display:block; margin-left:auto}
+  .anno span{font-family:'JetBrains Mono',monospace; font-size:.56rem; letter-spacing:.24em; color:var(--stone)}
+  .hint{bottom:44px; left:50%; transform:translateX(-50%); font-family:'JetBrains Mono',monospace; font-size:.6rem; letter-spacing:.16em; color:rgba(214,210,200,.4); text-transform:uppercase}
+
+  .stamp{display:inline-block; font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.16em; font-size:.68rem; color:var(--cedar); border:2px solid var(--cedar); box-shadow:3px 3px 0 rgba(210,160,105,.4); transform:rotate(-2.5deg); padding:8px 14px; border-radius:2px}
+  .rune{display:flex; align-items:center; gap:14px; margin:26px 0; color:var(--moss); opacity:.5; max-width:560px}
+  .rune::before,.rune::after{content:""; flex:1; height:1px; background:currentColor}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px}
+  .card h3{font-size:.98rem; color:var(--mist); margin-bottom:6px}
+  .card p{font-size:.87rem; color:rgba(214,210,200,.72)}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  @media(max-width:840px){.grid2,.grid3{grid-template-columns:1fr}}
+  .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px}
+  .chip{font-family:'JetBrains Mono',monospace; font-size:.66rem; letter-spacing:.14em; text-transform:uppercase; border:1px solid var(--line); border-radius:999px; padding:7px 14px; color:var(--moss)}
+  .chip.ember{color:var(--cedar); border-color:rgba(210,160,105,.4)}
+
+  /* timeline */
+  .tl{display:grid; gap:0; margin-top:10px}
+  .tl .row{display:grid; grid-template-columns:200px 1fr; gap:20px; padding:16px 0; border-bottom:1px solid var(--line); align-items:baseline}
+  .tl .row:last-child{border-bottom:none}
+  .tl .who{font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem; color:var(--mist)}
+  .tl .who small{display:block; font-family:'JetBrains Mono',monospace; font-weight:400; font-size:.58rem; letter-spacing:.18em; color:var(--moss); text-transform:uppercase; margin-top:4px}
+  .tl .what{font-size:.92rem; color:rgba(214,210,200,.78)}
+  @media(max-width:760px){.tl .row{grid-template-columns:1fr; gap:4px}}
+
+  /* terminal */
+  pre.term{background:rgba(29,33,30,.88); border:1px solid var(--line); border-left:3px solid var(--cedar); border-radius:10px; padding:18px 20px; font-family:'JetBrains Mono',monospace; font-size:clamp(.68rem,1.15vw,.82rem); color:var(--mist); line-height:1.75; min-height:11.5em; white-space:pre-wrap; word-break:break-word}
+  pre.term .c{color:rgba(214,210,200,.45)} pre.term .p{color:var(--moss)}
+  pre.term .you{color:var(--cedar)} pre.term .ok{color:#9fd0b2}
+  .cursor{display:inline-block; width:.55em; height:1.05em; background:var(--cedar); vertical-align:text-bottom; animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  /* keys slide */
+  .keys{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:8px}
+  @media(max-width:840px){.keys{grid-template-columns:1fr}}
+  .keycard{border:1px solid rgba(210,160,105,.4); background:rgba(210,160,105,.06); border-radius:12px; padding:22px}
+  .keycard.moss{border-color:rgba(88,143,94,.45); background:rgba(88,143,94,.07)}
+  .keycard .keyi{width:56px; color:var(--cedar); margin-bottom:12px}
+  .keycard.moss .keyi{color:var(--moss)}
+  .keycard h3{font-family:'Fraunces',serif; font-weight:600; color:var(--mist); font-size:1.25rem; margin-bottom:8px}
+  .keycard p{font-size:.9rem; color:rgba(214,210,200,.78)}
+  .keyi{display:block}
+
+  .bigserif{font-family:'Fraunces',serif; font-weight:300; font-style:italic; color:var(--mist); font-size:clamp(1.15rem,2.2vw,1.5rem); line-height:1.45; border-left:3px solid var(--cedar); padding:4px 0 4px 20px; margin:20px 0; max-width:760px}
+  .dogtag{font-family:'JetBrains Mono',monospace; font-size:clamp(.6rem,1.05vw,.74rem); letter-spacing:.08em; line-height:2; color:rgba(240,225,200,.85); border:1px solid rgba(210,160,105,.4); border-left:3px solid var(--cedar); border-radius:10px; padding:16px 22px; background:rgba(210,160,105,.05); margin-top:20px}
+  .dogtag b{color:var(--cedar); font-weight:700} .dogtag .b{color:#9fd0b2; font-weight:700}
+  .grovebig{width:min(200px,26vw); opacity:.16; margin-bottom:18px}
+
+  @media print{
+    body{overflow:visible; background:var(--charcoal)}
+    body::before{display:none}
+    .slide{position:relative; opacity:1; visibility:visible; height:100vh; page-break-after:always; transition:none}
+    .r{opacity:1 !important; transform:none !important}
+    .chrome,.hint{display:none !important}
+  }
+  @media (prefers-reduced-motion: reduce){ .r{transition:none; opacity:1; transform:none} .cursor{animation:none} }
+</style>
+<style>
+@keyframes gfade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+main .card,main .demo,main section{animation:gfade .7s ease both}
+main .card:nth-child(2),main .demo:nth-child(2){animation-delay:.12s}
+main .card:nth-child(3),main .demo:nth-child(3){animation-delay:.24s}
+main .card:nth-child(4),main .demo:nth-child(4){animation-delay:.36s}
+main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head>
+<body>
+
+<!-- chrome -->
+<div class="chrome brand">
+  <svg class="g" viewBox="0 0 268 160" aria-hidden="true"><g fill="none" stroke-linejoin="round" stroke-linecap="round" transform="translate(6 -12.8) scale(0.8)"><path d="M78 96 L48 141 L63 141 L40.5 176 L68 176 L68 196 L88 196 L88 176 L115.5 176 L93 141 L108 141 Z" fill="#F2EDE0" fill-opacity="0.10" stroke="#F2EDE0" stroke-opacity="0.8" stroke-width="7"/><path d="M242 96 L212 141 L227 141 L204.5 176 L232 176 L232 196 L252 196 L252 176 L279.5 176 L257 141 L272 141 Z" fill="#F2EDE0" fill-opacity="0.10" stroke="#F2EDE0" stroke-opacity="0.8" stroke-width="7"/><path d="M160 46 L115 113.5 L137.5 113.5 L103.75 166 L145 166 L145 196 L175 196 L175 166 L216.25 166 L182.5 113.5 L205 113.5 Z" fill="#E4AA71" fill-opacity="0.16" stroke="#E4AA71" stroke-width="10.5"/><path d="M28 206 H292" stroke="#F2EDE0" stroke-opacity="0.85" stroke-width="6"/></g></svg>
+  <div class="word">gran&middot;lund &middot; sv. &middot; <b>spruce grove</b> &middot; os</div>
+</div>
+<div class="chrome counter mono" id="counter">01 / 10</div>
+<div class="chrome pins" id="pins"></div>
+<button class="chrome cutfor" id="cutfor" title="Personalize — the deck re-cuts itself around a name. That's the point.">cut for <span id="guestName">Greg Luka &amp; the crew</span> &middot; &#9998;</button>
+<div class="chrome anno"><svg class="g" viewBox="0 0 268 160" aria-hidden="true"><g fill="none" stroke-linejoin="round" stroke-linecap="round" transform="translate(6 -12.8) scale(0.8)"><path d="M78 96 L48 141 L63 141 L40.5 176 L68 176 L68 196 L88 196 L88 176 L115.5 176 L93 141 L108 141 Z" fill="#F2EDE0" fill-opacity="0.10" stroke="#F2EDE0" stroke-opacity="0.8" stroke-width="7"/><path d="M242 96 L212 141 L227 141 L204.5 176 L232 176 L232 196 L252 196 L252 176 L279.5 176 L257 141 L272 141 Z" fill="#F2EDE0" fill-opacity="0.10" stroke="#F2EDE0" stroke-opacity="0.8" stroke-width="7"/><path d="M160 46 L115 113.5 L137.5 113.5 L103.75 166 L145 166 L145 196 L175 196 L175 166 L216.25 166 L182.5 113.5 L205 113.5 Z" fill="#E4AA71" fill-opacity="0.16" stroke="#E4AA71" stroke-width="10.5"/><path d="M28 206 H292" stroke="#F2EDE0" stroke-opacity="0.85" stroke-width="6"/></g></svg><span>ANNO &middot; 1727</span></div>
+<div class="chrome hint" id="hint">&larr; &rarr; to turn &middot; F fullscreen &middot; click the edges</div>
+
+<!-- 01 · COVER -->
+<section class="slide" id="s1">
+  <div class="inner">
+    <div class="kicker ember r" style="--d:.05s">Spruce Grove OS &middot; presented live &middot; <span id="today">today</span></div>
+    <h1 class="r" style="--d:.15s">Every lock<br>has a key.</h1>
+    <p class="lede r" style="--d:.3s">A short story about trust, tools, and the two trades meeting in this driveway — told by the guy whose Bronco you just brought back to life.</p>
+    <div class="r" style="--d:.45s; margin-top:26px"><span class="stamp">No pitch &middot; no invoice &middot; no ask</span></div>
+  </div>
+</section>
+
+<!-- 02 · THE MORNING -->
+<section class="slide" id="s2">
+  <div class="inner">
+    <div class="kicker r" style="--d:.05s">01 &middot; The morning</div>
+    <h2 class="r" style="--d:.15s">You already know<br>what trust is worth.</h2>
+    <p class="lede r" style="--d:.28s">2022 Bronco Sport. All keys lost — not a copy job, a full originate: blade cut, fob supplied, every old key erased from PATS so the lost one is dead forever. You were the first call for a reason.</p>
+    <p class="lede r" style="--d:.4s" style="--d:.4s">And the shop sent two. One who knows, one who&rsquo;s learning. That&rsquo;s the oldest technology there is — knowledge, transferred in person, with trust. <span class="ember">You&rsquo;ve been running open source your whole career. So have we.</span></p>
+    <div class="chips r" style="--d:.52s">
+      <span class="chip ember">NASTF certified</span><span class="chip">5 crew &middot; family-run</span><span class="chip">31 min avg response*</span><span class="chip">22 yrs &middot; 15,200+ jobs*</span><span class="chip">seven cities &middot; Centerton base</span>
+    </div>
+    <p class="dim r" style="--d:.62s; margin-top:14px; font-size:.72rem">*self-reported by Lock Doctor — we verify before we type. It&rsquo;s a grove rule.</p>
+  </div>
+</section>
+
+<!-- 03 · THE NEW LOCK -->
+<section class="slide" id="s3">
+  <div class="inner">
+    <div class="kicker r" style="--d:.05s">02 &middot; The new lock</div>
+    <h2 class="r" style="--d:.15s">Everybody carries a<br>new kind of lock now.</h2>
+    <p class="lede r" style="--d:.28s">Your wallet. Your data. Your models and configurations. A world full of software you rent but can&rsquo;t shape — and the gap was never intelligence. It&rsquo;s <b>approachability</b>, <b>usability</b>, and tools that don&rsquo;t talk down to you.</p>
+    <p class="lede r" style="--d:.4s">Everyone&rsquo;s told to &ldquo;use AI.&rdquo; <span class="ember">Almost nobody gets handed the key.</span></p>
+    <div class="chips r" style="--d:.52s"><span class="chip">approachable</span><span class="chip">usable</span><span class="chip ember">yours</span></div>
+  </div>
+</section>
+
+<!-- 04 · THE STORY -->
+<section class="slide" id="s4">
+  <div class="inner">
+    <div class="kicker r" style="--d:.05s">03 &middot; Why I build this way</div>
+    <h2 class="r" style="--d:.15s">I&rsquo;ve spent my career<br>handing people keys.</h2>
+    <div class="tl r" style="--d:.3s">
+      <div class="row"><div class="who">Apple<small>design roots</small></div><div class="what">Simple, human, beautiful — or it doesn&rsquo;t ship. That bar never left.</div></div>
+      <div class="row"><div class="who">School of Rock<small>scale &amp; spread the music</small></div><div class="what">Helped grow it from the inside — the run that carried it from Sterling Partners to Roark Capital, into today&rsquo;s Youth Enrichment Brands. Lesson: the people closest to the student know exactly what to build.</div></div>
+      <div class="row"><div class="who">Head to Toe Brands<small>beauty &amp; health, multi-portfolio</small></div><div class="what">Two people — me and Dustin — running the whole portfolio. Then the direction went non-personal and purely transactional, and leadership let good people down.</div></div>
+      <div class="row"><div class="who">The grove<small>now</small></div><div class="what">Active free agent. Took every lesson about removing technology obstacles and built the thing I wished existed — <span class="ember">then gave it away.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · WHAT WE BUILT -->
+<section class="slide" id="s5">
+  <div class="inner">
+    <div class="kicker r" style="--d:.05s">04 &middot; What we built</div>
+    <h2 class="r" style="--d:.15s">Spruce Grove OS.</h2>
+    <p class="lede r" style="--d:.25s">An agentic coding harness that lives on your machine and builds the small software your shop actually needs — then keeps maintaining it.</p>
+    <div class="grid2 r" style="--d:.38s">
+      <div class="card"><h3>Runs on your machine</h3><p>macOS, Linux, or WSL. Your files, your shell, your keys, local-first. There is no third-party pile of your customers.</p></div>
+      <div class="card"><h3>Any brain, one line</h3><p>OpenAI, Anthropic, Gemini, a private endpoint — swapped in config. <span class="ember">Models are rented. The harness is owned.</span></p></div>
+      <div class="card"><h3>Nothing runs without your yes</h3><p>Permission gates; approval before anything consequential. The harness makes care easy to do and hard to skip.</p></div>
+      <div class="card"><h3>Open by birth</h3><p>MIT license. Built from and import-compatible with Code Puppy (Michael Pfaffenberger) — provenance in writing, PROVENANCE.md.</p></div>
+    </div>
+    <p class="lede r" style="--d:.52s; margin-top:18px"><span class="ember">The computer doesn&rsquo;t even need to be opened.</span> An active internet connection and your voice — and it builds what you want to see and do, while you get to see the world.</p>
+  </div>
+</section>
+
+<!-- 06 · PROOF -->
+<section class="slide" id="s6">
+  <div class="inner">
+    <div class="kicker r" style="--d:.05s">05 &middot; Proof, not promise</div>
+    <h2 class="r" style="--d:.15s">Everything in this folder<br>was built the same way.</h2>
+    <p class="lede r" style="--d:.25s">The dossier I texted you. The business analysis in your inbox. This deck. One agent, one voice, one driveway.</p>
+    <pre class="term r" style="--d:.38s" id="term"></pre>
+    <div class="chips r" style="--d:.52s">
+      <span class="chip">leads.bentondrones.com — live</span><span class="chip">Bentonville Barber booking — live</span><span class="chip ember">the dossier &middot; the analysis &middot; this deck</span>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · FOR LOCK DOCTOR -->
+<section class="slide" id="s7">
+  <div class="inner">
+    <div class="kicker r" style="--d:.05s">06 &middot; If the grove worked for Lock Doctor</div>
+    <h2 class="r" style="--d:.15s">An apprentice that lives<br>on your own machine.</h2>
+    <div class="grid3 r" style="--d:.3s">
+      <div class="card"><h3>Listing audit</h3><p>Crawls Google, Bing, Yelp, Facebook; finds every hours/phone mismatch; drafts the fixes. You approve.</p></div>
+      <div class="card"><h3>Pricing page that filters</h3><p>Ranges for the ten most common jobs. The phone rings for booking, not interrogation.</p></div>
+      <div class="card"><h3>After-hours intake</h3><p>Voicemail-to-text; every morning, each tech gets a callback list with name, address, vehicle.</p></div>
+      <div class="card"><h3>The parts brain</h3><p>&ldquo;2022 Bronco Sport&rdquo; returns the right 902&nbsp;MHz part, what&rsquo;s in which van, what&rsquo;s running low.</p></div>
+      <div class="card"><h3>Review follow-through</h3><p>Drafted thank-you texts, every public review flagged. You keep the send button.</p></div>
+      <div class="card"><h3>Friday one-pager</h3><p>Jobs, revenue by service, reviews, no-shows, low stock — one page, every Friday.</p></div>
+    </div>
+    <p class="lede r" style="--d:.45s; margin-top:16px"><span class="ember">The apprentice handles the screen. Greg and the crew stay present with the people in the driveway.</span></p>
+  </div>
+</section>
+
+<!-- 08 · THE MISSION -->
+<section class="slide" id="s8">
+  <div class="inner">
+    <div class="kicker r" style="--d:.05s">07 &middot; The mission</div>
+    <h2 class="r" style="--d:.15s">The misfits. The rebels.<br>The kind. The pure.</h2>
+    <div class="grid3 r" style="--d:.28s">
+      <div class="card"><h3 class="mossy">WHAT</h3><p>The <b>Leather Apron Club</b> — the Junto, anno 1727, reborn in Bentonville. A circle that <span class="ember">appoints builders</span> and hands real tools to real tradespeople. The Tenant Forge and Hub exist to outsource and give away. Places like the 43 Institute fund the explorers; we build so they have time to explore.</p></div>
+      <div class="card"><h3 class="mossy">WHY</h3><p>Because the moment is severe. We developed speed and shut ourselves inside it — knowledge made us cynical, cleverness hard and unkind. Chaplin said it in 1940: <span class="ember">&ldquo;More than machinery, we need humanity. More than cleverness, we need kindness and gentleness.&rdquo;</span> Speed without either is just a faster lockout.</p></div>
+      <div class="card"><h3 class="mossy">HOW</h3><p>We appoint the kind, the pure, the misfits and rebels — then build <i>beside</i> them, train them as needed, and hand over the keys. All local. Full control. Nothing consequential runs without a human yes.</p></div>
+    </div>
+    <div class="bigserif r" style="--d:.45s">&ldquo;How can the Junto assist you in any of your honorable designs?&rdquo;<span class="dim" style="font-size:.8em"> — Franklin&rsquo;s standing question. Reborn in Bentonville. You&rsquo;ve been answering it since before we asked.</span></div>
+  </div>
+</section>
+
+<!-- 09 · THE OFFER -->
+<section class="slide" id="s9">
+  <div class="inner">
+    <div class="kicker ember r" style="--d:.05s">08 &middot; No strings attached</div>
+    <h2 class="r" style="--d:.15s">Two keys.<br>Pick either. Or neither.</h2>
+    <div class="keys r" style="--d:.3s">
+      <div class="keycard">
+        <svg class="keyi" viewBox="0 0 64 24" aria-hidden="true"><circle cx="10" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="3"/><path d="M17 12h40M48 12v7M57 12v10" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+        <h3>I &middot; Commissioner of the moment</h3>
+        <p>Say the thing your shop needs — out loud, right now. I build it with you today, live, free. No strings. No invoice. No ask.</p>
+      </div>
+      <div class="keycard moss">
+        <svg class="keyi" viewBox="0 0 64 24" aria-hidden="true"><circle cx="10" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="3"/><path d="M17 12h40M44 12v10M53 12v7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+        <h3>II &middot; Learn the craft</h3>
+        <p>I teach you to build with your voice — the apprentice path, the same way the trade passes from the driver&rsquo;s seat to the passenger seat. Your words. Your machine. Your shop.</p>
+      </div>
+    </div>
+    <p class="dim r" style="--d:.45s; margin-top:16px; font-size:.8rem">If neither fits today — keep the pages. Stories are how this gets backed.</p>
+  </div>
+</section>
+
+<!-- 10 · RUN WITH IT -->
+<section class="slide" id="s9b">
+  <div class="inner">
+    <div class="kicker ember r" style="--d:.05s">09 &middot; Run with it</div>
+    <h2 class="r" style="--d:.15s">The next 30 minutes<br>are already yours.</h2>
+    <div class="grid3 r" style="--d:.3s">
+      <div class="card"><h3>Today</h3><p>Pick the first tool <b>out loud</b> — the listing audit, the parts brain, anything from two slides back. I build it live while the van&rsquo;s still warm. Free, no strings. Or say &ldquo;not today&rdquo; and keep the folder either way.</p></div>
+      <div class="card"><h3>This week</h3><p>The thirty-minute coffee install: clone, sync, wake the apprentice. First real task: the listing audit. <span class="ember">Jonah&rsquo;s the natural first pilot</span> — he already lives in the parts universe. I&rsquo;ll sit with whoever runs it.</p></div>
+      <div class="card"><h3>The invite</h3><p>First council of the Leather Apron Club: <b>Friday, September 18 &middot; Bentonville Barber Company</b>. Your chair is pulled up. And the handoff package — everything you saw today, behind one simple key — is being cut right now.</p></div>
+    </div>
+    <p class="lede r" style="--d:.45s; margin-top:18px">Same road you took this morning: <span class="ember">watch, then do, then teach the passenger seat.</span></p>
+  </div>
+</section>
+
+<!-- 11 · THE SEND-OFF -->
+<section class="slide" id="s10">
+  <div class="inner">
+    <div class="kicker ember r" style="--d:.05s">10 &middot; The send-off</div>
+    <h1 class="r" style="--d:.15s; font-size:clamp(2.2rem,5.5vw,4rem)">Own your keys.<br>All of them.</h1>
+    <p class="lede r" style="--d:.3s">This morning you left my Bronco better than you found it — new key cut, every old key erased, so nothing lost could ever start it again. No permission slip. Just ownership, done at the machine. <span class="ember">That&rsquo;s the whole religion.</span></p>
+    <p class="lede r" style="--d:.42s; margin-top:14px">And it&rsquo;s why the grove exists: your files, your machine, your business — no vendor&rsquo;s fob in your ignition. If a provider ever wrongs you, you erase. One line. Cut a new key. Gone.</p>
+    <div class="dogtag r" style="--d:.54s">THE HONEST PART &middot; CEDAR&rsquo;S BRAIN TODAY: <b>SYNTHETIC.NEW</b> — MY PICK, TUNED MY WAY.<br>YOURS CAN BE ANY OF THEM: OPENAI &middot; ANTHROPIC &middot; GEMINI &middot; BEDROCK &middot; YOUR OWN ENDPOINT — ONE LINE, SWAP ANY TIME.<br>THE BRAIN IS RENTED. <b>THE HARNESS IS OWNED.</b> <span class="b">THE KEYS ARE YOURS.</span></div>
+    <p class="lede r" style="--d:.66s; margin-top:16px">The Forge comes next — trust, security, identity, rebuilt for the people who actually do the work. <span class="ember">The harness first.</span></p>
+    <p class="dim r" style="--d:.78s; margin-top:14px; font-size:.8rem">&mdash; Tyler &amp; Cedar</p>
+  </div>
+</section>
+
+<!-- 12 · THE SEAL -->
+<section class="slide" id="s11">
+  <div class="inner" style="text-align:center">
+    <svg class="grovebig r" style="--d:.05s; margin:0 auto" viewBox="0 0 268 160" aria-hidden="true"><g fill="none" stroke-linejoin="round" stroke-linecap="round" transform="translate(6 -12.8) scale(0.8)"><path d="M78 96 L48 141 L63 141 L40.5 176 L68 176 L68 196 L88 196 L88 176 L115.5 176 L93 141 L108 141 Z" fill="#F2EDE0" fill-opacity="0.10" stroke="#F2EDE0" stroke-opacity="0.8" stroke-width="7"/><path d="M242 96 L212 141 L227 141 L204.5 176 L232 176 L232 196 L252 196 L252 176 L279.5 176 L257 141 L272 141 Z" fill="#F2EDE0" fill-opacity="0.10" stroke="#F2EDE0" stroke-opacity="0.8" stroke-width="7"/><path d="M160 46 L115 113.5 L137.5 113.5 L103.75 166 L145 166 L145 196 L175 196 L175 166 L216.25 166 L182.5 113.5 L205 113.5 Z" fill="#E4AA71" fill-opacity="0.16" stroke="#E4AA71" stroke-width="10.5"/><path d="M28 206 H292" stroke="#F2EDE0" stroke-opacity="0.85" stroke-width="6"/></g></svg>
+    <h1 class="r" style="--d:.2s; font-size:clamp(1.9rem,4.6vw,3.4rem)">Together we are better. Always.</h1>
+    <p class="lede r" style="--d:.35s; margin:0 auto">Thank you for the morning, Greg — the van, the chest, the lesson in craft. The Bronco runs because of you.</p>
+    <div class="r" style="--d:.5s; margin-top:24px"><span class="stamp">No pitch &middot; no invoice &middot; no ask</span></div>
+    <p class="dim r" style="--d:.62s; margin-top:22px; font-size:.78rem">Every page in this folder — the dossier, the analysis, this deck — was built by Spruce Grove OS, in the same voice you just heard.<br><span class="mono ember" style="font-size:.68rem; letter-spacing:.16em; text-transform:uppercase">Tyler Granlund &middot; active free agent &middot; built with Cedar</span></p>
+  </div>
+</section>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var pinsBox=document.getElementById('pins'), counter=document.getElementById('counter');
+  var hint=document.getElementById('hint'), cutBtn=document.getElementById('cutfor');
+  var guestSpan=document.getElementById('guestName');
+  var cur=0, typing=false, reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pad=function(n){return (n<10?'0':'')+n;};
+
+  // dynamic personalization: date + remembered guest
+  var d=new Date();
+  document.getElementById('today').textContent=d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  var saved=null; try{saved=localStorage.getItem('grove-deck-guest');}catch(e){}
+  if(saved){guestSpan.textContent=saved;}
+  cutBtn.addEventListener('click',function(){
+    var name=window.prompt('Who are we cutting this for?', saved||'Greg Luka & the crew');
+    if(name&&name.trim()){saved=name.trim(); guestSpan.textContent=saved; try{localStorage.setItem('grove-deck-guest',saved);}catch(e){}}
+  });
+
+  slides.forEach(function(s,i){
+    var b=document.createElement('button'); b.className='pin'; b.title='Slide '+(i+1);
+    b.addEventListener('click',function(){go(i);}); pinsBox.appendChild(b);
+  });
+  var pins=[].slice.call(pinsBox.children);
+
+  function go(n){
+    n=Math.max(0,Math.min(slides.length-1,n));
+    if(n===cur&&slides[cur].classList.contains('active')){render();}
+    slides[cur].classList.remove('active');
+    cur=n; slides[cur].classList.add('active');
+    pins.forEach(function(p,i){p.classList.toggle('on',i===cur);});
+    counter.textContent=pad(cur+1)+' / '+pad(slides.length);
+    if(history.replaceState){history.replaceState(null,'','#'+(cur+1));}
+    hint.style.opacity=(cur===0)?'1':'0';
+    if(slides[cur].id==='s6'){playTerm();}
+  }
+  function render(){pins.forEach(function(p,i){p.classList.toggle('on',i===cur);});}
+
+  // terminal — the honest demo: the same commands that built this folder
+  var term=document.getElementById('term');
+  var LINES=[
+    {c:'c', t:"# this morning's dossier, the business analysis,\n# and this deck — one agent, one voice:"},
+    {c:'p', t:'$ git clone https://github.com/t-granlund/SPRUCE-GROVE-OS'},
+    {c:'p', t:'$ cd SPRUCE-GROVE-OS && uv sync'},
+    {c:'p', t:'$ uv run spruce-grove'},
+    {c:'you', t:'you> Audit Lock Doctor\u2019s listings \u2014 Google, Bing, Yelp,\n     Facebook. Compare hours, phone, services against\n     lockdoctorar.com. Output a mismatch table.', type:true},
+    {c:'ok', t:'grove> 6 frictions found \u00b7 6 drafted fixes \u00b7 awaiting your yes'}
+  ];
+  function lineEl(l){var s=document.createElement('span'); s.className=l.c; s.textContent=l.t; term.appendChild(s); term.appendChild(document.createTextNode('\n')); return s;}
+  function playTerm(){
+    if(typing) return; typing=true;
+    term.innerHTML='';
+    var i=0;
+    function next(){
+      if(i>=LINES.length){typing=false; return;}
+      var l=LINES[i++];
+      if(l.type&&!reduced){
+        var s=document.createElement('span'); s.className=l.c; term.appendChild(s);
+        var curEl=document.createElement('span'); curEl.className='cursor'; term.appendChild(curEl);
+        var j=0;
+        (function tick(){
+          if(j<l.t.length){s.textContent=l.t.slice(0,++j); setTimeout(tick,14);}
+          else{curEl.remove(); term.appendChild(document.createTextNode('\n')); setTimeout(next,260);}
+        })();
+      } else {lineEl(l); setTimeout(next, l.type?0:220);}
+    }
+    next();
+  }
+
+  // navigation
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault(); go(cur+1);}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault(); go(cur-1);}
+    else if(e.key==='Home'){go(0);} else if(e.key==='End'){go(slides.length-1);}
+    else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}
+  });
+  document.addEventListener('click',function(e){
+    if(e.target.closest('.pin')||e.target.closest('.cutfor')) return;
+    var w=window.innerWidth;
+    if(e.clientX>w*0.72) go(cur+1); else if(e.clientX<w*0.28) go(cur-1);
+  });
+  var tx=null;
+  document.addEventListener('touchstart',function(e){tx=e.changedTouches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(tx===null) return; var dx=e.changedTouches[0].clientX-tx; tx=null;
+    if(dx<-40) go(cur+1); else if(dx>40) go(cur-1);
+  },{passive:true});
+
+  var h=parseInt((location.hash||'').replace('#',''),10);
+  cur=isNaN(h)?0:Math.max(0,Math.min(slides.length-1,h-1));
+  slides[0].classList.remove('active'); slides[cur].classList.add('active'); go(cur);
+})();
+</script>
+<script>
+(function(){function go(){if(document.querySelector('#grove-welcome'))return;
+var w=document.createElement('div');w.id='grove-welcome';
+w.innerHTML='Welcome, <b>Greg</b>. This one is yours &mdash; take your time.';
+w.style.cssText='position:fixed;bottom:22px;right:22px;z-index:9999;max-width:320px;padding:14px 20px;'+
+'border:1px solid rgba(228,170,113,.5);border-radius:12px;background:rgba(14,19,15,.94);color:#EEEBE2;'+
+'font:15px/1.5 Georgia,serif;box-shadow:0 12px 40px -12px rgba(0,0,0,.7);opacity:0;transition:opacity .8s';
+document.body.appendChild(w);requestAnimationFrame(function(){w.style.opacity='1'});
+setTimeout(function(){w.style.opacity='0';setTimeout(function(){w.remove()},900)},6000);}
+if(document.body.classList&&!document.body.classList.contains('locked'))go();
+else{var i=setInterval(function(){if(!document.body.classList.contains('locked')){clearInterval(i);go()}},400);
+setTimeout(function(){clearInterval(i)},60000)}})();
+</script></body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Lock Doctor, the Apprentice, and the Third Set of Hands — Spruce Grove OS</title>
+<link rel="icon" type="image/png" href="spruce-logos/spruce-core-disc-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600;9..144,800&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1d211e; --spruce-deep:#20392b; --spruce:#2d4f3a; --moss:#588f5e;
+    --cedar:#d2a069; --stone:#d6d2c8; --mist:#f0e1c8;
+    --line:rgba(240,225,200,.14); --card:rgba(45,79,58,.16);
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:
+      radial-gradient(1100px 500px at 18% -5%, rgba(88,143,94,.14), transparent 60%),
+      radial-gradient(900px 480px at 92% 108%, rgba(210,160,105,.10), transparent 60%),
+      var(--charcoal);
+    color:var(--stone); line-height:1.7; font-size:17px;
+  }
+  body::before{content:""; position:fixed; inset:0; pointer-events:none; z-index:50; opacity:.045;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .kicker{font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.22em; font-size:.66rem; color:var(--moss)}
+  .kicker.ember{color:var(--cedar)}
+  h1{font-family:'Fraunces',serif; font-weight:800; color:var(--mist); font-size:clamp(2rem,5.5vw,3.4rem); line-height:1.1; margin:16px 0 14px}
+  h2{font-family:'Fraunces',serif; font-weight:600; color:var(--mist); font-size:1.5rem; margin:0 0 10px}
+  .wrap{max-width:720px; margin:0 auto; padding:0 22px; position:relative; z-index:2}
+  header.hero{padding:64px 0 20px}
+  .lede{font-size:1.05rem; color:rgba(214,210,200,.85)}
+  .dim{color:rgba(214,210,200,.6)}
+  .ember{color:var(--cedar)}
+  section{padding:26px 0}
+  p{margin-bottom:14px; color:rgba(214,210,200,.82)}
+  p b, li b{color:var(--mist)}
+  .drop::first-letter{font-family:'Fraunces',serif; font-weight:800; color:var(--mist); font-size:3.2em; float:left; line-height:.85; padding:4px 10px 0 0}
+  blockquote{font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:1.3rem; color:var(--mist); line-height:1.5; border-left:3px solid var(--cedar); padding:6px 0 6px 22px; margin:24px 0}
+  blockquote span{display:block; font-family:'JetBrains Mono',monospace; font-style:normal; font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--moss); margin-top:10px}
+  ul{list-style:none; display:grid; gap:12px; margin:16px 0}
+  li{padding-left:22px; position:relative; font-size:.95rem; color:rgba(214,210,200,.82)}
+  li::before{content:""; position:absolute; left:0; top:.7em; width:10px; height:2px; background:var(--cedar)}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 22px; margin:18px 0}
+  .card .mono{font-size:.78rem; line-height:1.9; color:rgba(240,225,200,.85)}
+  .card .mono b{color:var(--cedar)}
+  .stamp{display:inline-block; font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.16em; font-size:.66rem; color:var(--cedar); border:2px solid var(--cedar); box-shadow:3px 3px 0 rgba(210,160,105,.4); transform:rotate(-2deg); padding:7px 13px; border-radius:2px}
+  footer{padding:36px 0 70px; font-size:.8rem; color:rgba(214,210,200,.55)}
+  .grovebig{width:120px; opacity:.16; margin:0 auto 20px; display:block}
+  .close{ text-align:center; padding:44px 0 10px }
+  /* ------- THE GATE ------- */
+  #gate{position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(900px 500px at 50% 30%, rgba(45,79,58,.5), transparent 70%), var(--charcoal);
+    transition:opacity .7s ease, visibility 0s .7s}
+  #gate.open{opacity:0; visibility:hidden}
+  .gatebox{text-align:center; max-width:460px; padding:20px}
+  .gatebox .g{width:110px; opacity:.85; margin:0 auto 18px; display:block}
+  .gatebox input{font-family:'JetBrains Mono',monospace; font-size:1.2rem; letter-spacing:.3em; text-align:center; width:220px;
+    background:rgba(29,33,30,.9); color:var(--mist); border:1px solid var(--line); border-radius:10px; padding:12px 10px; outline:none; text-transform:uppercase}
+  .gatebox input:focus{border-color:var(--cedar)}
+  .gatebox button{display:block; margin:14px auto 0; font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.16em; font-size:.72rem; color:var(--charcoal); background:var(--cedar); border:none; border-radius:10px; padding:11px 26px; cursor:pointer; font-weight:700}
+  .gate-msg{font-family:'JetBrains Mono',monospace; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; margin-top:14px; min-height:1.2em; color:var(--cedar)}
+  .shake{animation:shake .4s} @keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+  .hintline{font-size:.82rem; color:rgba(214,210,200,.55); margin-top:12px}
+  body.locked main, body.locked header.hero{display:none}
+  @media print{ #gate{display:none} body.locked main, body.locked header.hero{display:block} }
+  @media print{ body::before{display:none} section{page-break-inside:avoid} }
+</style>
+<style>
+@keyframes gfade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+main .card,main .demo,main section{animation:gfade .7s ease both}
+main .card:nth-child(2),main .demo:nth-child(2){animation-delay:.12s}
+main .card:nth-child(3),main .demo:nth-child(3){animation-delay:.24s}
+main .card:nth-child(4),main .demo:nth-child(4){animation-delay:.36s}
+main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head>
+<body class="locked">
+
+<!-- THE GATE — same key as the package -->
+<div id="gate">
+  <div class="gatebox" id="gatebox">
+    <svg class="g" viewBox="0 0 268 160" aria-hidden="true"><g fill="none" stroke-linejoin="round" stroke-linecap="round" transform="translate(6 -12.8) scale(0.8)"><path d="M78 96 L48 141 L63 141 L40.5 176 L68 176 L68 196 L88 196 L88 176 L115.5 176 L93 141 L108 141 Z" fill="#F2EDE0" fill-opacity="0.10" stroke="#F2EDE0" stroke-opacity="0.8" stroke-width="7"/><path d="M242 96 L212 141 L227 141 L204.5 176 L232 176 L232 196 L252 196 L252 176 L279.5 176 L257 141 L272 141 Z" fill="#F2EDE0" fill-opacity="0.10" stroke="#F2EDE0" stroke-opacity="0.8" stroke-width="7"/><path d="M160 46 L115 113.5 L137.5 113.5 L103.75 166 L145 166 L145 196 L175 196 L175 166 L216.25 166 L182.5 113.5 L205 113.5 Z" fill="#E4AA71" fill-opacity="0.16" stroke="#E4AA71" stroke-width="10.5"/><path d="M28 206 H292" stroke="#F2EDE0" stroke-opacity="0.85" stroke-width="6"/></g></svg>
+    <div class="kicker ember">The explainer &middot; cut for Lock Doctor</div>
+    <h1 style="font-size:clamp(1.6rem,4vw,2.4rem)">One key turns it.</h1>
+    <input id="key" type="password" maxlength="12" autocomplete="off" placeholder="&bull;&bull;&bull;&bull;&bull;" aria-label="Key">
+    <button id="turn">Turn the key</button>
+    <div class="gate-msg" id="msg"></div>
+    <p class="hintline">Hint: the blade that starts the Bronco — five characters, starts with H.</p>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker ember">A true story from a driveway in Bella Vista &middot; published by the grove</div>
+    <h1>The Lock Doctor, the Apprentice,<br>and the Third Set of Hands</h1>
+    <p class="lede">A locksmith fixed my car. An agent built his package. And both of them hit the same wall — the one this story is about removing.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2>The morning</h2>
+  <p class="drop">2022 Bronco Sport. All keys lost — not a copy job, a full originate. Greg Luka showed up with his apprentice, a Ford Transit, and a tool chest that means business. About an hour later: new blade cut, new fob programmed, every old key erased from the car's memory so nothing lost could ever start it again. No drama, no permission slip. Just ownership, done at the machine.</p>
+  <p>While they worked, a third set of hands was busy. By the time the van pulled out, there was a dossier, a full business analysis of Greg's shop, and a presentation — researched, written, designed, and delivered. All built by one agent, in one voice, from one driveway. That part matters, and I'll come back to it.</p>
+</section>
+
+<section>
+  <h2>The wall</h2>
+  <p>Here's the honest part. They were excited — genuinely. And then came the question that every builder should learn to love, because it's never going away:</p>
+  <blockquote>&ldquo;This is cool. But&hellip; how does this help us?&rdquo;<span>the most honest question in the building</span></blockquote>
+  <p>I'd heard it before, almost word for word, from a muralist couple months back. Talent, hustle, real work — and a wall between them and the tools. It's not a intelligence gap and it's certainly not a effort gap. It's intimidation. The technology has been made to feel like it belongs to other people. That wall is a design failure, and it's ours to remove, not theirs to climb.</p>
+</section>
+
+<section>
+  <h2>The key that started it</h2>
+  <p class="drop">Greg told the origin himself: Lock Doctor exists because he locked himself out of his own house once — and instead of calling somebody, he wanted to figure out how the lock worked. That curiosity became a 22-year trade. And look what the key became along the way: a blade became a fob; a fob became a digital pass key riding in a phone wallet; a car now trusts a VIN over the air. Keys and access keep changing shape — and Greg keeps being the person who can still open the door.</p>
+  <p>That's the part worth seeing plainly: <span class="ember">keys and access have always been the business.</span> The grove is simply the next key — access to your own tools. It removes the distance between you and the vendors, the dealers, the paperwork. And where the vendors leave a gap, you can employ yourself: build your own small tools, automate the annoying middle, open paths of your own.</p>
+</section>
+
+<section>
+  <h2>The plain answer</h2>
+  <p>So here it is, matter-of-fact, no ceremony. For a shop like Lock Doctor — or any shop, any studio, any one-person empire — the whole shopping list is:</p>
+  <ul>
+    <li><b>A Mac or a PC.</b> That's the hardware. Whatever's already on the desk.</li>
+    <li><b>One subscription, like any other tool.</b> I run my agent's brain on <b>synthetic.new</b>, tuned my way. OpenAI, Anthropic, Gemini, Bedrock, or your own endpoint all work too — one line of config to swap any of them, any time. The brain is rented. The harness is owned.</li>
+    <li><b>Your voice.</b> The record-and-mockingbird piece: you say what you need — out loud, in your own words, exactly the way you'd explain it to a new hire — and it builds what it hears. No code. No jargon. And nothing consequential happens without your yes.</li>
+  </ul>
+  <p>That's it. Three items, two of which most people already have.</p>
+</section>
+
+<section>
+  <h2>What it actually does for a shop like this</h2>
+  <p>Not someday. These are the first six builds, in trade language:</p>
+  <ul>
+    <li><b>The internet stops disagreeing about your hours.</b> The agent audits every listing — Google, Bing, Yelp, Facebook — and drafts the corrections.</li>
+    <li><b>Your phone rings for booking, not interrogation.</b> A published pricing range filters the tire-kickers before they dial.</li>
+    <li><b>Nights become morning callback lists,</b> not lost leads — name, address, vehicle, drafted first text, one per tech.</li>
+    <li><b>&ldquo;2022 Bronco Sport&rdquo; returns the right 902&nbsp;MHz fob</b> before the van's in park — a local parts brain: part numbers, FCC IDs, what's in which van, what's low.</li>
+    <li><b>Thank-yous get drafted and reviews get flagged.</b> You keep the send button.</li>
+    <li><b>Friday is a one-pager,</b> not an hour of receipts: jobs, revenue by service, no-shows, low stock.</li>
+    <li><b>Tell it what to print, cut, or craft.</b> A 3D printer on the bench, blade blanks, jigs, signage — even a handcrafted lock-pick tool sold as a product under your own brand. Precision and craft, made sellable.</li>
+    <li><b>Route around the middlemen</b> where it's yours to automate — small custom tools for the gaps the vendors leave, built and maintained on your machine.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>What it isn't</h2>
+  <p>It isn't a robot locksmith. It doesn't replace NASTF credentialing, factory software, or twenty-two years of judgment — the stuff that made Greg the first call this morning. It replaces the <i>administrative perimeter</i>: the seat licenses, the retainer emails, the retyping, the 10 PM phone tag. And it does it on the shop's own machine, in files the shop owns. If a provider ever wrongs you, you erase — one line, cut a new key, gone.</p>
+  <p>This morning, a locksmith erased every old key from my car so nothing lost could ever start it again. That's not just good locksmithing. That's the whole philosophy, done at the machine.</p>
+</section>
+
+<section>
+  <h2>The third set of hands, explained</h2>
+  <p>The dossier, the analysis, the deck, this story — all of it was built by the same apprentice while the real apprentice was learning fobs in the passenger seat. Its name is Cedar. It runs on the grove — an open-source harness, MIT licensed, built from and credit-honest about the Code Puppy project it grew from. It doesn't sell software; it builds the small tools a shop actually needs and keeps maintaining them. That's why the passenger seat matters: watch, then do, then teach. It worked for locks long before it worked for code.</p>
+  <div class="card">
+    <p class="mono">THE HONEST PART &middot; CEDAR'S BRAIN TODAY: <b>SYNTHETIC.NEW</b> — MY PICK, TUNED MY WAY.<br>
+    YOURS CAN BE ANY OF THEM — ONE LINE, SWAP ANY TIME.<br>
+    THE BRAIN IS RENTED. <b>THE HARNESS IS OWNED.</b> THE KEYS ARE YOURS.</p>
+  </div>
+  <div class="card" style="border-color:rgba(210,160,105,.4);background:rgba(210,160,105,.06)">
+    <h3>Run the loop yourself</h3>
+    <p style="font-size:.9rem">The whole thing — the recording, Mockingbird, the gates, the build — is taught end to end in the training page. Today&rsquo;s actual voice note plays in there, right next to everything it became. Once you see the uncertainty is loud and the gates are real, the harness becomes the answer to building anything you want. <span class="ember">Take it and run.</span></p>
+    <p style="margin-top:10px"><a href="spruce-grove-training.html" style="color:var(--cedar);font-weight:700">Start end-to-end training &rarr;</a></p>
+  </div>
+</section>
+
+<section>
+  <h2>The send-off</h2>
+  <p>Greg and his crew got their package behind a key only they hold. If it's not useful, they delete it and we're still good — they got the Bronco running. That's what no-strings actually means: no invoice, no follow-up sequence, no &ldquo;quick sync.&rdquo; Just a standing question, older than the trade:</p>
+  <blockquote>&ldquo;How can the Junto assist you in any of your honorable designs?&rdquo;<span>Franklin's standing question &middot; the Leather Apron Club &middot; anno 1727 &middot; reborn in Bentonville</span></blockquote>
+  <p>First council: Friday, September 18, at Bentonville Barber Company — a shop that already runs on tools the grove built. The chair's open. Bring the apprentice.</p>
+  <p>This page is the explainer — published behind the same key as the whole package, so it stays yours until you say otherwise. Inside the package: how it works, how to start, the first builds. The mechanics of it, taught the way the trade teaches: <b>watch, then do, then teach the passenger seat.</b> Hit the ground running — and if it ever isn't useful, delete it. No strings, no invoice, no ask.</p>
+  <p style="margin-top:20px"><span class="stamp">Together we are better. Always.</span></p>
+</section>
+
+<div class="close">
+  <svg class="grovebig" viewBox="0 0 268 160" aria-hidden="true"><g fill="none" stroke-linejoin="round" stroke-linecap="round" transform="translate(6 -12.8) scale(0.8)"><path d="M78 96 L48 141 L63 141 L40.5 176 L68 176 L68 196 L88 196 L88 176 L115.5 176 L93 141 L108 141 Z" fill="#F2EDE0" fill-opacity="0.10" stroke="#F2EDE0" stroke-opacity="0.8" stroke-width="7"/><path d="M242 96 L212 141 L227 141 L204.5 176 L232 176 L232 196 L252 196 L252 176 L279.5 176 L257 141 L272 141 Z" fill="#F2EDE0" fill-opacity="0.10" stroke="#F2EDE0" stroke-opacity="0.8" stroke-width="7"/><path d="M160 46 L115 113.5 L137.5 113.5 L103.75 166 L145 166 L145 196 L175 196 L175 166 L216.25 166 L182.5 113.5 L205 113.5 Z" fill="#E4AA71" fill-opacity="0.16" stroke="#E4AA71" stroke-width="10.5"/><path d="M28 206 H292" stroke="#F2EDE0" stroke-opacity="0.85" stroke-width="6"/></g></svg>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p class="mono">Provenance</p>
+    <p style="margin-top:10px">Spruce Grove OS: MIT licensed; built from and import-compatible with Code Puppy by Michael Pfaffenberger; provenance in writing. Business facts about Lock Doctor verified from lockdoctorar.com, live listings, and a direct conversation with the owner; self-reported figures marked as such where they appear in the full analysis. Prepared by Tyler Granlund — active free agent — with Cedar. Every page in this story was built in the same driveway it describes.</p>
+  </div>
+</footer>
+</div>
+
+<script>
+(function(){
+  var GATE_KEY='hu101';
+  var gate=document.getElementById('gate'), box=document.getElementById('gatebox'),
+      input=document.getElementById('key'), msg=document.getElementById('msg'),
+      btn=document.getElementById('turn'), body=document.body;
+  var unlocked=false;
+  try{ unlocked=sessionStorage.getItem('grove-handoff-key')===GATE_KEY; }catch(e){}
+  if(unlocked){ body.classList.remove('locked'); gate.classList.add('open'); }
+  function tryKey(){
+    var v=(input.value||'').trim().toLowerCase();
+    if(v===GATE_KEY){
+      msg.textContent='Pin set. Welcome to the grove.';
+      try{ sessionStorage.setItem('grove-handoff-key',GATE_KEY); }catch(e){}
+      setTimeout(function(){ body.classList.remove('locked'); gate.classList.add('open'); },450);
+    } else {
+      msg.textContent='Not this key.';
+      box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+      input.value=''; input.focus();
+    }
+  }
+  btn.addEventListener('click',tryKey);
+  input.addEventListener('keydown',function(e){ if(e.key==='Enter') tryKey(); });
+  if(!unlocked) setTimeout(function(){ input.focus(); },300);
+})();
+</script>
+<script>
+(function(){function go(){if(document.querySelector('#grove-welcome'))return;
+var w=document.createElement('div');w.id='grove-welcome';
+w.innerHTML='Welcome, <b>Greg</b>. This one is yours &mdash; take your time.';
+w.style.cssText='position:fixed;bottom:22px;right:22px;z-index:9999;max-width:320px;padding:14px 20px;'+
+'border:1px solid rgba(228,170,113,.5);border-radius:12px;background:rgba(14,19,15,.94);color:#EEEBE2;'+
+'font:15px/1.5 Georgia,serif;box-shadow:0 12px 40px -12px rgba(0,0,0,.7);opacity:0;transition:opacity .8s';
+document.body.appendChild(w);requestAnimationFrame(function(){w.style.opacity='1'});
+setTimeout(function(){w.style.opacity='0';setTimeout(function(){w.remove()},900)},6000);}
+if(document.body.classList&&!document.body.classList.contains('locked'))go();
+else{var i=setInterval(function(){if(!document.body.classList.contains('locked')){clearInterval(i);go()}},400);
+setTimeout(function(){clearInterval(i)},60000)}})();
+</script></body>
+</html>
