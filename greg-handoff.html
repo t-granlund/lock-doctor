@@ -91,15 +91,7 @@
   footer .mono{font-size:.66rem; letter-spacing:.18em; text-transform:uppercase; color:var(--moss)}
   @media print{ #gate{display:none} body.locked main{display:block} body::before{display:none} }
 </style>
-<style>
-@keyframes gfade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-main .card,main .demo,main section{animation:gfade .7s ease both}
-main .card:nth-child(2),main .demo:nth-child(2){animation-delay:.12s}
-main .card:nth-child(3),main .demo:nth-child(3){animation-delay:.24s}
-main .card:nth-child(4),main .demo:nth-child(4){animation-delay:.36s}
-main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style></head>
+</head>
 <body class="locked">
 
 <!-- THE GATE — a courtesy lock, the honest kind -->
@@ -165,7 +157,7 @@ main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
     <h2>Take everything. It&rsquo;s yours.</h2>
     <p class="lede" style="margin-bottom:14px">Click to view; right-click &rarr; Save As to keep a copy. Nothing here is a trial.</p>
     <div class="grid3">
-      <div class="card asset"><span class="kicker">document</span><h3>The dossier</h3><p class="dim" style="font-size:.82rem">Vehicle, situation, credentials — the page that got your Ford authorization moving.</p><a href="greg-dossier.html">Open &rarr;</a></div>
+      <div class="card asset"><span class="kicker">private &middot; by text</span><h3>The dossier</h3><p class="dim" style="font-size:.82rem">Vehicle, situation, credentials — with ID imagery. That page travels by text, not by public link. This copy ships without it on purpose.</p></div>
       <div class="card asset"><span class="kicker">document</span><h3>Business analysis</h3><p class="dim" style="font-size:.82rem">Your shop, read like a system: strengths, frictions, the grove fit, the honest math.</p><a href="lock-doctor-business-analysis.html">Open &rarr;</a></div>
       <div class="card asset"><span class="kicker">the explainer</span><h3>Your morning, written up</h3><p class="dim" style="font-size:.82rem">Keys and access, the wall, the plain answer — how this helps a shop like yours. Published behind your key.</p><a href="lock-doctor-story.html">Open &rarr;</a></div>
       <div class="card asset"><span class="kicker">website plan</span><h3>Today vs tomorrow</h3><p class="dim" style="font-size:.82rem">The live audit of lockdoctorar.com, the FPO previews, the agentic lifecycle, security &amp; analytics — the whole optimization plan.</p><a href="lock-doctor-website-plan.html">Open &rarr;</a></div>
@@ -173,7 +165,7 @@ main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
       <div class="card asset"><span class="kicker">training</span><h3>End-to-end training</h3><p class="dim" style="font-size:.82rem">The whole loop taught start to finish — with this morning&rsquo;s actual voice note playable next to everything it became. Then run with it.</p><a href="spruce-grove-training.html">Open &rarr;</a></div>
       <div class="card asset"><span class="kicker">presentation</span><h3>The deck</h3><p class="dim" style="font-size:.82rem">&ldquo;Every lock has a key&rdquo; — the story you just watched, runnable any time (arrows to turn, F for fullscreen).</p><a href="lock-doctor-presentation.html">Open &rarr;</a></div>
       <div class="card asset"><span class="kicker">plan</span><h3>Bronco key plan</h3><p class="dim" style="font-size:.82rem">The full originate action plan — fob specs, PATS, the steps your crew is executing.</p><a href="bronco-key-final-action-plan.html">Open &rarr;</a></div>
-      <div class="card asset"><span class="kicker">brand kit</span><h3>Spruce Grove marks</h3><p class="dim" style="font-size:.82rem">The Core Disc, the Grove Mark, the Ghost, the lockups. Use freely — MIT, like everything else.</p><span class="mono"><a href="spruce-logos/grove-mark.svg">png &middot;</a> <a href="spruce-logos/spruce-core-disc-64.png">ember &middot;</a> <a href="spruce-logos/spruce_grove_logo_white.png">white &middot;</a> <a href="spruce-logos/grove-ghost.svg">svg</a></span></div>
+      <div class="card asset"><span class="kicker">brand kit</span><h3>Spruce Grove marks</h3><p class="dim" style="font-size:.82rem">The Core Disc, the Grove Mark, the Ghost, the lockups. Use freely — Apache-2.0, like everything else.</p><span class="mono"><a href="spruce-logos/grove-mark.svg">png &middot;</a> <a href="spruce-logos/spruce-core-disc-64.png">ember &middot;</a> <a href="spruce-logos/spruce_grove_logo_white.png">white &middot;</a> <a href="spruce-logos/grove-ghost.svg">svg</a></span></div>
       <div class="card asset"><span class="kicker">privacy</span><h3>One ask, one rule</h3><p class="dim" style="font-size:.82rem">The dossier holds our IDs. Once the Bronco&rsquo;s done, delete your copy — we practice what we preach about other people&rsquo;s data. Deal?</p><span class="mono mossy">agreed &rarr; delete</span></div>
     </div>
   </section>
@@ -229,7 +221,7 @@ main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
   <section>
     <div class="kicker">04 &middot; Get it running</div>
     <h2>The thirty-minute coffee install</h2>
-    <p class="lede" style="margin-bottom:14px">macOS, Linux, or WSL with Python 3.11+. Nothing phones home to survive — offline reinstall wheel, your own git mirrors, MIT license.</p>
+    <p class="lede" style="margin-bottom:14px">macOS, Linux, or WSL with Python 3.11+. Nothing phones home to survive — offline reinstall wheel, your own git mirrors, Apache-2.0 license.</p>
     <pre class="term"><span class="c"># 1. put the grove on the machine</span>
 git clone https://github.com/t-granlund/SPRUCE-GROVE-OS
 cd SPRUCE-GROVE-OS
@@ -276,7 +268,7 @@ uv run spruce-grove
 
   <footer>
     <p class="mono">Provenance</p>
-    <p style="margin-top:10px">Spruce Grove OS: MIT licensed, built from and import-compatible with <b>Code Puppy</b> by Michael Pfaffenberger — provenance in writing (PROVENANCE.md). Prepared by Tyler Granlund as a no-strings handoff: no response expected, no invoice attached. This page is not indexed and sits behind a courtesy key; the durable security is that every asset here is local and yours.</p>
+    <p style="margin-top:10px">Spruce Grove OS: Apache-2.0 licensed — FYI, chosen over MIT for the explicit patent grant and enterprise-friendly terms: same freedom, stronger armor, no lawyer research project — built from and import-compatible with <b>Code Puppy</b> by Michael Pfaffenberger — provenance in writing (PROVENANCE.md). Prepared by Tyler Granlund as a no-strings handoff: no response expected, no invoice attached. This page is not indexed and sits behind a courtesy key; the durable security is that every asset here is local and yours.</p>
     <p style="margin-top:12px" class="mono">Together we are better. Always. &middot; Leave everything better than you found it.</p>
   </footer>
 </div>
@@ -320,17 +312,5 @@ uv run spruce-grove
   if(!unlocked) setTimeout(function(){ input.focus(); },300);
 })();
 </script>
-<script>
-(function(){function go(){if(document.querySelector('#grove-welcome'))return;
-var w=document.createElement('div');w.id='grove-welcome';
-w.innerHTML='Welcome, <b>Greg</b>. This one is yours &mdash; take your time.';
-w.style.cssText='position:fixed;bottom:22px;right:22px;z-index:9999;max-width:320px;padding:14px 20px;'+
-'border:1px solid rgba(228,170,113,.5);border-radius:12px;background:rgba(14,19,15,.94);color:#EEEBE2;'+
-'font:15px/1.5 Georgia,serif;box-shadow:0 12px 40px -12px rgba(0,0,0,.7);opacity:0;transition:opacity .8s';
-document.body.appendChild(w);requestAnimationFrame(function(){w.style.opacity='1'});
-setTimeout(function(){w.style.opacity='0';setTimeout(function(){w.remove()},900)},6000);}
-if(document.body.classList&&!document.body.classList.contains('locked'))go();
-else{var i=setInterval(function(){if(!document.body.classList.contains('locked')){clearInterval(i);go()}},400);
-setTimeout(function(){clearInterval(i)},60000)}})();
-</script></body>
+</body>
 </html>

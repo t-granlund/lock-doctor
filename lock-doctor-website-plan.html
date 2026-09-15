@@ -70,15 +70,7 @@
   body.locked main{display:none}
   @media print{#gate{display:none}body.locked main{display:block}body::before{display:none}}
 </style>
-<style>
-@keyframes gfade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-main .card,main .demo,main section{animation:gfade .7s ease both}
-main .card:nth-child(2),main .demo:nth-child(2){animation-delay:.12s}
-main .card:nth-child(3),main .demo:nth-child(3){animation-delay:.24s}
-main .card:nth-child(4),main .demo:nth-child(4){animation-delay:.36s}
-main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style></head>
+</head>
 <body class="locked">
 
 <div id="gate">
@@ -164,7 +156,7 @@ main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
   <blockquote>&ldquo;Hostinger Horizons&rdquo; isn&rsquo;t just a platform label &mdash; it&rsquo;s the dependency. The site is a generated app with no source you own, no git history, and edits that must pass through the vendor&rsquo;s tool. Whoever manages it today, the shop can&rsquo;t fix, move, or grow it alone.</blockquote>
   <div class="grid2">
     <div class="card"><h3>Today&rsquo;s dependencies</h3><p>The builder account &middot; the generated code nobody can read &middot; per-edit costs or wait times &middot; hosting locked to the platform &middot; no tests, no backups story, no way to leave without starting over.</p></div>
-    <div class="card"><h3>Tomorrow&rsquo;s ownership</h3><p>Static files you own (MIT) &middot; source in your own git mirror &middot; any host, or none &middot; the agent maintains it in plain language &middot; leaving costs nothing because everything is already yours.</p></div>
+    <div class="card"><h3>Tomorrow&rsquo;s ownership</h3><p>Static files you own (Apache-2.0) &middot; source in your own git mirror &middot; any host, or none &middot; the agent maintains it in plain language &middot; leaving costs nothing because everything is already yours.</p></div>
   </div>
 </section>
 
@@ -210,7 +202,7 @@ main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
 <footer>
   <div class="wrap">
     <p class="mono">Provenance &amp; capture notes</p>
-    <p style="margin-top:10px">lockdoctorar.com inspected live on Tuesday, September 15, 2026 with a real browser: platform tag, page weight, request count, rendered copy, and stats-counter behavior as shown in the captures above. Shop figures marked * are self-reported by Lock Doctor (see the business analysis for the full verification notes). Spruce Grove OS: MIT licensed, built from Code Puppy by Michael Pfaffenberger. Prepared by Tyler Granlund with Cedar &mdash; no response expected, no invoice attached.</p>
+    <p style="margin-top:10px">lockdoctorar.com inspected live on Tuesday, September 15, 2026 with a real browser: platform tag, page weight, request count, rendered copy, and stats-counter behavior as shown in the captures above. Shop figures marked * are self-reported by Lock Doctor (see the business analysis for the full verification notes). Spruce Grove OS: Apache-2.0 licensed, built from Code Puppy by Michael Pfaffenberger. Prepared by Tyler Granlund with Cedar &mdash; no response expected, no invoice attached.</p>
     <p style="margin-top:12px" class="mono">Together we are better. Always. &middot; Leave everything better than you found it.</p>
   </div>
 </footer>
@@ -243,17 +235,5 @@ main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
   if(!unlocked) setTimeout(function(){ input.focus(); },300);
 })();
 </script>
-<script>
-(function(){function go(){if(document.querySelector('#grove-welcome'))return;
-var w=document.createElement('div');w.id='grove-welcome';
-w.innerHTML='Welcome, <b>Greg</b>. This one is yours &mdash; take your time.';
-w.style.cssText='position:fixed;bottom:22px;right:22px;z-index:9999;max-width:320px;padding:14px 20px;'+
-'border:1px solid rgba(228,170,113,.5);border-radius:12px;background:rgba(14,19,15,.94);color:#EEEBE2;'+
-'font:15px/1.5 Georgia,serif;box-shadow:0 12px 40px -12px rgba(0,0,0,.7);opacity:0;transition:opacity .8s';
-document.body.appendChild(w);requestAnimationFrame(function(){w.style.opacity='1'});
-setTimeout(function(){w.style.opacity='0';setTimeout(function(){w.remove()},900)},6000);}
-if(document.body.classList&&!document.body.classList.contains('locked'))go();
-else{var i=setInterval(function(){if(!document.body.classList.contains('locked')){clearInterval(i);go()}},400);
-setTimeout(function(){clearInterval(i)},60000)}})();
-</script></body>
+</body>
 </html>

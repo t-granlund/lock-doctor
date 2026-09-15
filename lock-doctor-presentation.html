@@ -115,15 +115,7 @@
   }
   @media (prefers-reduced-motion: reduce){ .r{transition:none; opacity:1; transform:none} .cursor{animation:none} }
 </style>
-<style>
-@keyframes gfade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-main .card,main .demo,main section{animation:gfade .7s ease both}
-main .card:nth-child(2),main .demo:nth-child(2){animation-delay:.12s}
-main .card:nth-child(3),main .demo:nth-child(3){animation-delay:.24s}
-main .card:nth-child(4),main .demo:nth-child(4){animation-delay:.36s}
-main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style></head>
+</head>
 <body>
 
 <!-- chrome -->
@@ -196,7 +188,7 @@ main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
       <div class="card"><h3>Runs on your machine</h3><p>macOS, Linux, or WSL. Your files, your shell, your keys, local-first. There is no third-party pile of your customers.</p></div>
       <div class="card"><h3>Any brain, one line</h3><p>OpenAI, Anthropic, Gemini, a private endpoint — swapped in config. <span class="ember">Models are rented. The harness is owned.</span></p></div>
       <div class="card"><h3>Nothing runs without your yes</h3><p>Permission gates; approval before anything consequential. The harness makes care easy to do and hard to skip.</p></div>
-      <div class="card"><h3>Open by birth</h3><p>MIT license. Built from and import-compatible with Code Puppy (Michael Pfaffenberger) — provenance in writing, PROVENANCE.md.</p></div>
+      <div class="card"><h3>Open by birth</h3><p>Apache-2.0 license. Built from and import-compatible with Code Puppy (Michael Pfaffenberger) — provenance in writing, PROVENANCE.md.</p></div>
     </div>
     <p class="lede r" style="--d:.52s; margin-top:18px"><span class="ember">The computer doesn&rsquo;t even need to be opened.</span> An active internet connection and your voice — and it builds what you want to see and do, while you get to see the world.</p>
   </div>
@@ -398,17 +390,5 @@ main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
   slides[0].classList.remove('active'); slides[cur].classList.add('active'); go(cur);
 })();
 </script>
-<script>
-(function(){function go(){if(document.querySelector('#grove-welcome'))return;
-var w=document.createElement('div');w.id='grove-welcome';
-w.innerHTML='Welcome, <b>Greg</b>. This one is yours &mdash; take your time.';
-w.style.cssText='position:fixed;bottom:22px;right:22px;z-index:9999;max-width:320px;padding:14px 20px;'+
-'border:1px solid rgba(228,170,113,.5);border-radius:12px;background:rgba(14,19,15,.94);color:#EEEBE2;'+
-'font:15px/1.5 Georgia,serif;box-shadow:0 12px 40px -12px rgba(0,0,0,.7);opacity:0;transition:opacity .8s';
-document.body.appendChild(w);requestAnimationFrame(function(){w.style.opacity='1'});
-setTimeout(function(){w.style.opacity='0';setTimeout(function(){w.remove()},900)},6000);}
-if(document.body.classList&&!document.body.classList.contains('locked'))go();
-else{var i=setInterval(function(){if(!document.body.classList.contains('locked')){clearInterval(i);go()}},400);
-setTimeout(function(){clearInterval(i)},60000)}})();
-</script></body>
+</body>
 </html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bronco Key Rescue — FINAL Action Plan (Monday Noon Edition)</title>
+<style>
+  :root{
+    --bg:#f4f5f1; --ink:#1c2420; --muted:#5b6660; --card:#ffffff; --line:#e2e6de;
+    --green:#2f6b4f; --green-dk:#14201b; --green-lt:#e5f0ea;
+    --amber:#b45309; --amber-lt:#fdf0dd; --red:#b3261e; --red-lt:#fbe9e7;
+    --blue:#1d4ed8; --blue-lt:#e3ebfc;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; font-size:16px}
+  a{color:var(--green); font-weight:600}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:980px; margin:0 auto; padding:0 20px}
+
+  .hero{background:linear-gradient(135deg,#14201b 0%,#1e3a2c 70%,#24503b 100%); color:#eef4ef; padding:44px 0 36px}
+  .hero h1{font-size:clamp(1.7rem,4.5vw,2.5rem); letter-spacing:-.02em; line-height:1.15}
+  .hero .sub{color:#b9c9bd; margin-top:8px; max-width:660px}
+  .pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
+  .pill{background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.22); border-radius:999px; padding:5px 14px; font-size:.82rem; font-weight:600}
+  .pill b{color:#fff}
+  .verdict{margin-top:24px; background:var(--green-lt); color:var(--ink); border-left:6px solid var(--green); border-radius:10px; padding:16px 18px; font-size:.97rem}
+  .verdict strong{color:var(--green)}
+
+  nav{background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:10}
+  nav .wrap{display:flex; gap:4px; overflow-x:auto; padding:10px 20px}
+  nav a{white-space:nowrap; font-size:.85rem; text-decoration:none; color:var(--muted); padding:6px 12px; border-radius:8px}
+  nav a:hover{background:var(--green-lt); color:var(--green); text-decoration:none}
+
+  section{padding:36px 0 8px}
+  h2{font-size:1.4rem; letter-spacing:-.01em; margin-bottom:6px}
+  .lede{color:var(--muted); font-size:.95rem; margin-bottom:18px; max-width:720px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin-bottom:16px; box-shadow:0 1px 3px rgba(20,32,27,.05)}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+  @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+  h3{font-size:1.05rem; margin-bottom:8px}
+  .small{font-size:.85rem; color:var(--muted)}
+  ul.tight{padding-left:20px; display:grid; gap:6px}
+  .kv{display:grid; grid-template-columns:150px 1fr; gap:4px 12px; font-size:.92rem}
+  .kv dt{color:var(--muted); font-weight:600}
+  .kv dd{margin:0}
+  @media(max-width:560px){.kv{grid-template-columns:1fr} .kv dt{margin-top:6px}}
+
+  .badge{display:inline-block; border-radius:6px; padding:2px 9px; font-size:.72rem; font-weight:700; letter-spacing:.02em; text-transform:uppercase; white-space:nowrap}
+  .b-open{background:var(--green-lt); color:var(--green)}
+  .b-247{background:var(--blue-lt); color:var(--blue)}
+  .b-warn{background:var(--amber-lt); color:var(--amber)}
+  .b-nastf{background:#ede7f6; color:#5b3fa8}
+  .b-call{background:var(--green); color:#fff}
+
+  .tblwrap{overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:#fff; margin-bottom:16px}
+  table{border-collapse:collapse; width:100%; min-width:700px; font-size:.88rem}
+  th{background:var(--green-dk); color:#eef4ef; text-align:left; padding:11px 14px; font-size:.76rem; text-transform:uppercase; letter-spacing:.05em}
+  td{padding:11px 14px; border-top:1px solid var(--line); vertical-align:top}
+  tbody tr:nth-child(even){background:#fafbf8}
+  .phone{font-variant-numeric:tabular-nums; white-space:nowrap}
+
+  .opt{border-top:6px solid var(--green); position:relative}
+  .opt.alt{border-top-color:var(--amber)}
+  .opt .tag{position:absolute; top:-6px; right:18px; background:var(--green); color:#fff; font-size:.68rem; font-weight:800; letter-spacing:.08em; padding:4px 12px; border-radius:0 0 8px 8px; text-transform:uppercase}
+  .opt.alt .tag{background:var(--amber)}
+
+  .step{display:flex; gap:14px; padding:14px 0; border-top:1px solid var(--line); align-items:flex-start}
+  .step:first-of-type{border-top:none}
+  .step input[type=checkbox]{width:20px; height:20px; margin-top:3px; accent-color:var(--green); cursor:pointer; flex:none}
+  .step .n{background:var(--green); color:#fff; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:800; flex:none; margin-top:2px}
+  .step.done .txt{text-decoration:line-through; color:var(--muted)}
+  .step .txt{flex:1}
+  .step .txt b{display:block}
+  .when{display:inline-block; font-size:.7rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; background:var(--green-lt); color:var(--green); padding:2px 8px; border-radius:5px; margin-bottom:4px}
+  .when.late{background:var(--amber-lt); color:var(--amber)}
+  .when.fallback{background:var(--red-lt); color:var(--red)}
+
+  .script{background:var(--green-dk); color:#dfeae2; border-radius:14px; padding:22px; margin-bottom:16px}
+  .script p{font-size:1.0rem; line-height:1.7}
+  .script .q{color:#9fd0b2}
+  .btn{display:inline-block; background:var(--green); color:#fff !important; border:none; border-radius:10px; padding:10px 18px; font-size:.9rem; font-weight:700; cursor:pointer; margin-top:14px; text-decoration:none}
+  .btn:hover{background:#3d8563; text-decoration:none}
+  .btn.ghost{background:transparent; border:1px solid rgba(255,255,255,.35)}
+
+  .check{display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-top:1px dashed var(--line); font-size:.95rem}
+  .check:first-of-type{border-top:none}
+  .check input{width:18px; height:18px; margin-top:2px; accent-color:var(--green); cursor:pointer}
+  .check.done label{text-decoration:line-through; color:var(--muted)}
+
+  .note{background:var(--amber-lt); border-left:5px solid var(--amber); border-radius:8px; padding:12px 16px; font-size:.88rem; margin-top:14px}
+  .note.red{background:var(--red-lt); border-left-color:var(--red)}
+  .note.green{background:var(--green-lt); border-left-color:var(--green)}
+
+  .vstep{display:flex; gap:14px; padding:11px 0; border-top:1px solid var(--line); align-items:flex-start}
+  .vstep:first-of-type{border-top:none}
+  .vstep .n{background:var(--green-dk); color:#fff; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:800; flex:none; margin-top:2px}
+  .vstep .t b{display:block}
+
+  footer{padding:36px 0 60px; color:var(--muted); font-size:.8rem}
+  #top-btn{position:fixed; bottom:18px; right:18px; background:var(--green-dk); color:#fff; border:none; border-radius:50%; width:42px; height:42px; font-size:1.1rem; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.25); display:none}
+  @media print{ nav,#top-btn,.btn{display:none} .hero{background:#1c2420 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact} body{background:#fff} .card,.tblwrap{box-shadow:none; break-inside:avoid} }
+</style>
+</head>
+<body>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <h1>Keys Today — Final Action Plan</h1>
+    <p class="sub">It's <b>Monday ~noon</b>. Every shop below is open <i>right now</i>. New mission: phone calls in the next 15 minutes, tech in the driveway early afternoon, <b>driving later today</b>.</p>
+    <div class="pills">
+      <span class="pill">Vehicle: <b>2022 Bronco Sport Outer Banks</b></span>
+      <span class="pill">VIN: <b>3FMCR9C68NRD69408</b></span>
+      <span class="pill">Where: <b>Bella Vista, AR 72714 — car is unlocked in the driveway</b></span>
+      <span class="pill">Fob: <b>M3N-A2C931426 (902 MHz) · Ford 164-R8182 · Escape-family — NOT rare</b></span>
+      <span class="pill">Status: <b>ALL KEYS LOST</b></span>
+    </div>
+    <div class="verdict">
+      <strong>The play, in one breath:</strong> call <b>Lock Doctor</b> and <b>Access Lock &amp; Key</b> back-to-back right now — they're the two closest (~10–15 min out), both explicitly do all-keys-lost proximity work, and both are open until 10 PM. Pop-A-Lock is the instant-answer 24/7 safety net. Take the <b>first shop that commits to an arrival window this afternoon at ≲ $400</b>. Ask every shop the same gating question first: <i>"Do you stock the Ford 902 MHz M3N-A2C931426 fob — the common 2020–22 Escape 4-button (164-R8182)?"</i> A shop with the fob in the van beats a cheaper shop without it.
+    </div>
+    <div class="verdict" style="background:var(--blue-lt); border-left-color:var(--blue)">
+      <strong style="color:var(--blue)">Live status — 12:30 PM:</strong> Called Lock Doctor. Owner is <b>Greg Luka</b> ("Owner &amp; Head Locksmith") — he'll call back. Verified: 5-person crew (not solo), NASTF-certified, reviews consistently describe same-hour response with zero ghosting complaints found. <b>Patience window: until ~1:15 PM.</b> No callback by then &rarr; call Access Lock &amp; Key (479) 855-5624 and Pop-A-Lock (479) 621-9900. Either way, shops run until 10 PM — today still ends with you driving.
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#ranked">Validated Rankings</a>
+    <a href="#callorder">Call Order</a>
+    <a href="#timeline">Today's Timeline</a>
+    <a href="#script">Phone Script</a>
+    <a href="#steps">Step-by-Step</a>
+    <a href="#visit">When Tech Arrives</a>
+    <a href="#prep">Have Ready</a>
+    <a href="#fallback">Fallback Lane</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- RANKED -->
+  <section id="ranked">
+    <h2>1 · The field, re-validated today</h2>
+    <p class="lede">Re-checked <b>Monday ~11:55 AM</b> against each shop's live site + current listing status. All six are open right now. Ratings are last-known values (review sites block automated checks) — treat them as directionally solid, not gospel. Only Pop-A-Lock publishes real prices; everyone else quotes by phone.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>Rank</th><th>Shop</th><th>Phone</th><th>Distance</th><th>Open now</th><th>Proof they can do this job</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="badge b-call">Call #1</span></td>
+            <td><b>Lock Doctor</b><br><span class="small">Centerton — site: lockdoctorar.com <i>(lockdoctor.co is a dead parked domain)</i></span></td>
+            <td class="phone"><a href="tel:+14792707522">(479) 270-7522</a></td>
+            <td>~10–15 min</td>
+            <td><span class="badge b-open">Yes · til 10 PM</span></td>
+            <td><span class="badge b-nastf">NASTF certified</span> — the real OEM-security credential for VIN key-code lookups. Services literally list "Lost Car Keys" and "Keys From Scratch" via VIN. 4.8 (205) last-known. Bella Vista in written service area.</td>
+          </tr>
+          <tr>
+            <td><span class="badge b-call">Call #2</span></td>
+            <td><b>Access Lock &amp; Key</b><br><span class="small">Cave Springs — call/text</span></td>
+            <td class="phone"><a href="tel:+14798555624">(479) 855-5624</a></td>
+            <td>~10 min — closest</td>
+            <td><span class="badge b-open">Yes · til 10 PM</span></td>
+            <td>Best FAQ of the bunch: all-keys-lost , proximity push-button keys , cuts the emergency blade on-site , deletes all existing keys . 4.7 (136). <span class="badge b-warn">One open question:</span> declined last night calling the fob "rare" — that was the Bronco-vs-Bronco-Sport mixup. Lead with the part number and they may flip.</td>
+          </tr>
+          <tr>
+            <td><span class="badge b-call">Call #3</span></td>
+            <td><b>Pop-A-Lock NWA</b><br><span class="small">Fayetteville HQ · dispatches to Bella Vista</span></td>
+            <td class="phone"><a href="tel:+14796219900">479-621-9900</a><br><span class="small">alt: <a href="tel:+14794449900">479-444-9900</a></span></td>
+            <td>~20–30 min (mobile techs)</td>
+            <td><span class="badge b-247">24/7 — always open</span></td>
+            <td>Explicit: proximity/push-to-start support, makes keys when "lost, stolen, damaged," erases old keys from memory. <b>Only shop with published pricing</b> (corporate: fob programming $150–300). National brand = fewest surprises. 479-621-9900 is literally the Bella Vista dispatch line.</td>
+          </tr>
+          <tr>
+            <td>#4</td>
+            <td><b>Presto Locksmith</b><br><span class="small">Bentonville</span></td>
+            <td class="phone"><a href="tel:+14793263737">(479) 326-3737</a></td>
+            <td>~15–20 min</td>
+            <td><span class="badge b-open">Yes · til 1 AM</span></td>
+            <td>Homepage: "Lose all the keys to your truck? We make keys for most makes" + proximity/smart keys on-site. 5.0 (90) last-known. Minor quirk: some site testimonials are from Oregon (relocated owner) — reviews may not all be local.</td>
+          </tr>
+          <tr>
+            <td>#5</td>
+            <td><b>AutoKeys &amp; Locks Solutions</b><br><span class="small">Lowell</span></td>
+            <td class="phone"><a href="tel:+14794778804">(479) 477-8804</a></td>
+            <td>~20–25 min</td>
+            <td><span class="badge b-open">Yes · til 10 PM</span></td>
+            <td>Explicit AKL via VIN + proof of ownership, programs push-to-start proximity keys, Bella Vista listed. Open 8 AM–10 PM today.</td>
+          </tr>
+          <tr>
+            <td>#6</td>
+            <td><b>Discount Locksmith of NWA</b><br><span class="small">Fayetteville</span></td>
+            <td class="phone"><a href="tel:+14795218884">(479) 521-8884</a><br><span class="small"><a href="tel:+14796363500">(479) 636-3500</a></span></td>
+            <td>~30 min</td>
+            <td><span class="badge b-open">Yes · til 7 PM</span></td>
+            <td>Strongest paper fit: names <b>Ford</b> explicitly, "smart/proximity keys cut and programmed." 4.9 (475) — best reviews. <span class="badge b-warn">Capacity risk:</span> solo operator (Kyle) 30 min out — great shop, wrong day to be 6th in line.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note green"><b>Why Lock Doctor over the closest shop?</b> Proximity is nearly a tie (both ~10–15 min). The NASTF certification is the tiebreaker — it's the credential that makes all-keys-lost VIN key origination fast, legal, and drama-free. Access Lock &amp; Key might win if they confirm fob stock on call #2 — they're closest and their FAQ is the most explicit. Hence: call both, five minutes apart, and let commitment speed decide.</div>
+  </section>
+
+  <!-- CALL ORDER -->
+  <section id="callorder">
+    <h2>2 · The call order — who and why</h2>
+    <p class="lede">Three calls, fifteen minutes, decision by ~12:45. Same script each time (§4), one shop-specific tweak for Access.</p>
+    <div class="grid3">
+      <div class="card opt">
+        <span class="tag">Call #1 · now</span>
+        <h3>Lock Doctor</h3>
+        <div class="small" style="margin-bottom:8px"><a href="tel:+14792707522">(479) 270-7522</a> · Centerton · til 10 PM</div>
+        <ul class="tight small">
+          <li><b>NASTF-certified</b> — the credential that unlocks VIN key codes; cleanest "clear-cut" job</li>
+          <li>Explicit lost-car-keys / keys-from-scratch via VIN</li>
+          <li>Closest tier (~10–15 min), strong 4.8 (205) reputation</li>
+          <li><b>Listen for:</b> fob stock, arrival window, out-the-door price</li>
+        </ul>
+      </div>
+      <div class="card opt">
+        <span class="tag">Call #2 · +5 min</span>
+        <h3>Access Lock &amp; Key</h3>
+        <div class="small" style="margin-bottom:8px"><a href="tel:+14798555624">(479) 855-5624</a> · Cave Springs · til 10 PM</div>
+        <ul class="tight small">
+          <li><b>Closest shop on the board</b> — and most explicit proximity/AKL FAQ</li>
+          <li>Passed last night on a <b>false rarity call</b> — correct them with the part number (script has the line)</li>
+          <li>If they confirm stock: likely fastest arrival of anyone</li>
+          <li><b>Listen for:</b> "Oh, the Escape fob — yeah we stock those"</li>
+        </ul>
+      </div>
+      <div class="card opt alt">
+        <span class="tag">Call #3 · safety net</span>
+        <h3>Pop-A-Lock</h3>
+        <div class="small" style="margin-bottom:8px"><a href="tel:+14796219900">479-621-9900</a> · 24/7 · Bella Vista dispatch</div>
+        <ul class="tight small">
+          <li>Answers instantly, any hour — the <b>guaranteed human</b> on the line</li>
+          <li>Published anchor: fob programming <b>$150–300</b></li>
+          <li>Explicit erase-old-keys language; proximity/push-to-start supported</li>
+          <li>Call immediately if #1/#2 can't commit to an afternoon window</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="timeline">
+    <h2>3 · Today's timeline</h2>
+    <p class="lede">Working backwards from "driving later today." The visit itself runs 30–60 minutes once the tech arrives.</p>
+    <div class="card">
+      <div class="vstep"><span class="n">1</span><div class="t"><b>12:00–12:15 PM — make the calls</b><span class="small">Lock Doctor → Access → (Pop-A-Lock if needed). Ask for a <b>named arrival window</b>, not "sometime this afternoon."</span></div></div>
+      <div class="vstep"><span class="n">2</span><div class="t"><b>~12:45 PM — decision point</b><span class="small">First shop to commit to arriving <b>before ~2:00 PM</b> at ≲ $400 wins. Confirm: fob in stock · out-the-door price · they'll erase all old keys · warranty.</span></div></div>
+      <div class="vstep"><span class="n">3</span><div class="t"><b>~1:00–2:00 PM — tech en route / on site</b><span class="small">Have registration photo + photo ID ready to show the moment they pull up. Visit runs 30–60 min.</span></div></div>
+      <div class="vstep"><span class="n">4</span><div class="t"><b>~2:00–3:00 PM — tested, paid, driving</b><span class="small">Walk the full test yourself (§6) before they leave. Ask about the spare-fob deal while they're still in the driveway.</span></div></div>
+      <div class="vstep"><span class="n">5</span><div class="t"><b>If nothing commits by 1:15 PM — widen the net</b><span class="small">Presto (479) 326-3737 · AutoKeys (479) 477-8804 · Discount (479) 521-8884 (closes 7 PM — call them earlier rather than later). Still very fixable today.</span></div></div>
+    </div>
+    <div class="note"><b>The math that makes this painless:</b> every mobile shop on this list is open until at least 7 PM, three of them until 10 PM, and Pop-A-Lock never closes. A same-day fix is the <i>default outcome</i> here — the only thing that can blow it is waiting. Calls first, everything else second.</div>
+  </section>
+
+  <!-- SCRIPT -->
+  <section id="script">
+    <h2>4 · The phone script</h2>
+    <p class="lede">Same script for every call. It gets you a real quote instead of "bring it in and we'll see."</p>
+    <div class="script">
+      <p>"Hi — <span class="q">2022 Ford Bronco Sport</span>, intelligent access <span class="q">proximity key</span>, <span class="q">all keys lost</span>. The fob is Ford's <span class="q">902 MHz M3N-A2C931426</span> — the common 4-button one shared with the <span class="q">2020–22 Escape</span>, part <span class="q">164-R8182</span> — <span class="q">not</span> the rare full-size-Bronco fob. The car is in my driveway in <span class="q">Bella Vista, 72714</span>, VIN <span class="q">3FMCR9C68NRD69408</span>, and it's unlocked.</p>
+      <p style="margin-top:10px">Do you <span class="q">stock that fob</span>? Can you come out <span class="q">this afternoon</span>? I need someone here <span class="q">between 1:00 and 2:00 PM</span> — can you commit to a window? What's the <span class="q">out-the-door price</span> — fob, emergency blade, programming, and trip fee? And you'll <span class="q">erase all the old keys</span>, right?"</p>
+      <p class="small" style="margin-top:12px; color:#9fb8a8">Once they say yes, close the loop: "OEM or aftermarket fob? What's the warranty? Do you erase all keys? What's the ETA?"</p>
+      <button class="btn" id="copy-btn"> Copy script</button>
+      <a class="btn ghost" href="tel:+14792707522"> Call Lock Doctor</a>
+      <a class="btn ghost" href="sms:+14798555624"> Text Access Lock &amp; Key</a>
+      <a class="btn ghost" href="tel:+14796219900"> Call Pop-A-Lock</a>
+    </div>
+    <div class="note red" style="margin-top:0"><b>The Access Lock &amp; Key correction line</b> — they declined last night thinking this fob is rare. If you call or text them, open with: <i>"Quick correction on last night — this fob is <b>not</b> the rare full-size Bronco one. It's the <b>902 MHz M3N-A2C931426 / 164-R8182</b>, the same 4-button fob as the <b>2020–22 Escape</b> — one of the highest-volume Ford fobs there is. If you stock that, I need someone here between 1:00 and 2:00 PM."</i> Then run the normal script.</div>
+  </section>
+
+  <!-- STEPS -->
+  <section id="steps">
+    <h2>5 · The action plan — check boxes as you go</h2>
+    <p class="lede">They'll stay checked if you reload.</p>
+    <div class="card" id="steps-card">
+      <div class="step" data-k="f1"><span class="n">1</span><input type="checkbox" aria-label="step 1"><div class="txt"><span class="when">Right now — 2 minutes</span><b>Grab your registration photo + photo ID</b><span class="small">Required for all-keys-lost work — the tech will ask before touching anything. VIN: 3FMCR9C68NRD69408.</span></div></div>
+      <div class="step" data-k="f2"><span class="n">2</span><input type="checkbox" aria-label="step 2"><div class="txt"><span class="when">Call #1 — now</span><b>Call Lock Doctor: (479) 270-7522</b><span class="small">Script in §4. Hard ask: "tech here between 1:00 and 2:00 PM." Get fob stock + out-the-door price + named window.</span></div></div>
+      <div class="step" data-k="f3"><span class="n">3</span><input type="checkbox" aria-label="step 3"><div class="txt"><span class="when">Call #2 — right after</span><b>Call/Text Access Lock &amp; Key: (479) 855-5624</b><span class="small">Lead with the Escape-fob correction line (§4 red box), then the same script. Closest shop — if they confirm stock, they may beat everyone on arrival time.</span></div></div>
+      <div class="step" data-k="f4"><span class="n">4</span><input type="checkbox" aria-label="step 4"><div class="txt"><span class="when">If #1 and #2 stall</span><b>Call Pop-A-Lock: 479-621-9900</b><span class="small">24/7 line — answers instantly. Same script. Corporate anchors fob programming at $150–300.</span></div></div>
+      <div class="step" data-k="f5"><span class="n">5</span><input type="checkbox" aria-label="step 5"><div class="txt"><span class="when late">By ~12:45 PM — decision</span><b>Book the first shop committed to arriving before ~2:00 PM at ≲ $400</b><span class="small">"Sometime this afternoon" = politely decline, you need a window. Morning/afternoon upcharges are normal; absurd quotes are not.</span></div></div>
+      <div class="step" data-k="f6"><span class="n">6</span><input type="checkbox" aria-label="step 6"><div class="txt"><span class="when late">While you wait</span><b>Check AAA / auto insurance for key-service reimbursement</b><span class="small">Many policies cover $100+ per incident. Free money for two minutes of hold music. Snap the receipt when done.</span></div></div>
+      <div class="step" data-k="f7"><span class="n">7</span><input type="checkbox" aria-label="step 7"><div class="txt"><span class="when">When the tech arrives</span><b>Show ID + registration, confirm "erase ALL old keys"</b><span class="small">That permanently kills the lost fob. Then walk the full test in §6 yourself before paying.</span></div></div>
+      <div class="step" data-k="f8"><span class="n">8</span><input type="checkbox" aria-label="step 8"><div class="txt"><span class="when">Before they leave</span><b>Ask for a spare fob cut in the same visit</b><span class="small">Trip + programming overhead is already paid; incremental is often ~$80–150. Cheapest spare you'll ever get — never ride on one key again.</span></div></div>
+      <div class="step" data-k="f9"><span class="n">9</span><input type="checkbox" aria-label="step 9"><div class="txt"><span class="when late">This week</span><b>If you didn't get the spare today, order one</b><span class="small">Duplicate with a working key in hand: typically ~$150–250 at a dealer parts counter or locksmith. The owner's manual begs you to store one away from the vehicle.</span></div></div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section id="visit">
+    <h2>6 · When the tech arrives — what actually happens</h2>
+    <p class="lede">Typical time on site: <b>30–60 minutes</b>. Nothing about your truck changes except: it gets a new key, and the lost one dies.</p>
+    <div class="grid2">
+      <div class="card">
+        <h3>The visit, compressed</h3>
+        <div class="vstep"><span class="n">1</span><div class="t"><b>ID check</b><span class="small">Registration + photo ID. Legal requirement — a tech who <i>doesn't</i> ask is the red flag.</span></div></div>
+        <div class="vstep"><span class="n">2</span><div class="t"><b>VIN → key code</b><span class="small">Factory cut code via the credentialed security database (this is what NASTF access is for).</span></div></div>
+        <div class="vstep"><span class="n">3</span><div class="t"><b>New fob + blade cut</b><span class="small">Fresh blank from van stock, emergency blade machine-cut to code. You can watch.</span></div></div>
+        <div class="vstep"><span class="n">4</span><div class="t"><b>Program via OBD port</b><span class="small">ALL existing keys erased first (lost fob dies forever), then the new fob pairs. Make them say "all keys erased" out loud.</span></div></div>
+        <div class="vstep"><span class="n">5</span><div class="t"><b>Full test — do it yourself</b><span class="small">Push-button start · walk-up proximity unlock · remote lock/unlock · remote start (2x) · metal blade in the driver's door. Every function, before they leave.</span></div></div>
+        <div class="vstep"><span class="n">6</span><div class="t"><b>Itemized receipt + warranty</b><span class="small">1 year on fob + programming is fair and common. Photograph the receipt for insurance.</span></div></div>
+      </div>
+      <div class="card">
+        <h3>What ~$250–400 buys</h3>
+        <ul class="tight small">
+          <li><b>Fob hardware:</b> ~$60–150 (ask OEM vs aftermarket — that's the swing)</li>
+          <li><b>Emergency blade cut:</b> ~$15–50</li>
+          <li><b>Programming labor:</b> ~$75–150</li>
+          <li><b>Mobile/trip fee:</b> ~$25–75</li>
+        </ul>
+        <p class="small" style="margin-top:8px">Quote way under? Ask what's missing. Way over? Ask why. Those four lines are the whole job.</p>
+        <h3 style="margin-top:16px">Your fob, for the record</h3>
+        <dl class="kv">
+          <dt>FCC ID</dt><dd><b>M3N-A2C931426</b> (902 MHz)</dd>
+          <dt>Ford part #</dt><dd><b>164-R8182</b> (4-button: unlock, lock, 2x remote start, panic)</dd>
+          <dt>Shared with</dt><dd>Escape 2020–25, Maverick 2022–25, Explorer 2018–23, Expedition 2018–22 — high-volume part</dd>
+          <dt>Battery / blade</dt><dd>CR2450 · HU101 emergency blade</dd>
+          <dt>If a shop hesitates</dt><dd>They're thinking of the full-size Bronco's 315 MHz M3N-A2C931423 — genuinely rare. Yours isn't that one.</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREP -->
+  <section id="prep">
+    <h2>7 · Have ready before they roll</h2>
+    <div class="card" id="checks">
+      <div class="check" data-k="g1"><input type="checkbox" id="g1i"><label for="g1i"><b>Registration photo / document</b> — proof of ownership, required</label></div>
+      <div class="check" data-k="g2"><input type="checkbox" id="g2i"><label for="g2i"><b>Photo ID</b> matching the registration (Ashley or Tyler)</label></div>
+      <div class="check" data-k="g3"><input type="checkbox" id="g3i"><label for="g3i"><b>VIN handy:</b> 3FMCR9C68NRD69408</label></div>
+      <div class="check" data-k="g4"><input type="checkbox" id="g4i"><label for="g4i"><b>Payment method</b> — ask what they take when you get the quote</label></div>
+      <div class="check" data-k="g5"><input type="checkbox" id="g5i"><label for="g5i"><b>Driveway access</b> — clear path to the driver's door / OBD port</label></div>
+      <div class="check" data-k="g6"><input type="checkbox" id="g6i"><label for="g6i"><b>Phone charged</b> — tech will call on arrival</label></div>
+      <div class="check" data-k="g7"><input type="checkbox" id="g7i"><label for="g7i"><b>Decide now: spare fob in the same visit?</b> ~$80–150 incremental while they're already there — yes, obviously</label></div>
+      <div class="check" data-k="g8"><input type="checkbox" id="g8i"><label for="g8i"><b>Car is UNLOCKED</b> — keep valuables out; no lockout work needed for the tech</label></div>
+    </div>
+  </section>
+
+  <!-- FALLBACK -->
+  <section id="fallback">
+    <h2>8 · Fallback lane (only if every mobile shop fails)</h2>
+    <div class="card opt alt">
+      <span class="tag">Plan C</span>
+      <h3>McLarty Daniel Ford + tow — Bentonville</h3>
+      <div class="small" style="margin-bottom:8px">Service: <a href="tel:+14792500922">(479) 250-0922</a> · Main: <a href="tel:+14798024890">(479) 802-4890</a> · Service hours today: 7 AM–6 PM</div>
+      <ul class="tight small">
+        <li>Requires the truck <b>towed</b> to their bay on FDRS — call <b>Ford Roadside first: <a href="tel:+18002413673">1-800-241-3673</a></b> (5yr/60k likely active; lost-key tow may be covered — ask, then tow)</li>
+        <li>~$350–550 typical; one Bronco Sport owner reports ~$700 — get the quote in writing</li>
+        <li>To be fixed today, the truck needs to be in their bay by ~3:30–4:00 PM — so if you're falling back, decide by <b>2:00 PM</b> at the latest</li>
+        <li>100% OEM key and workmanship — the slow lane, but it still ends with you driving today</li>
+      </ul>
+    </div>
+    <div class="note"><b>Reality check:</b> you are extremely unlikely to need this lane. Six open mobile shops serve Bella Vista, three of them explicitly advertise all-keys-lost proximity work, and it's early afternoon with the whole evening ahead. Make the three calls — the rest is just a Tuesday.</div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p><b>About this page:</b> final edition, re-validated Monday ~11:55 AM from each shop's live website and current listing status (all six confirmed open). Ratings shown are last-known values — review platforms block automated re-checks — and every price is a typical market range, <b>not a quote</b>: confirm out-the-door totals by phone before dispatch. Companion reference: <i>bronco-key-rescue-plan.html</i> (full Sunday-evening dossier: fob forensics, dealer route detail, DIY debunking, security notes). Nothing here is an endorsement; rankings reflect fit for this specific job — close, open now, credentialed, and holding the right fob.</p>
+    </div>
+  </footer>
+</div>
+
+<button id="top-btn" title="Back to top" aria-label="Back to top">↑</button>
+
+<script>
+(function(){
+  var KEY='bronco-key-final-v1', state={};
+  try{ state=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ state={}; }
+
+  function apply(el, on){ el.classList.toggle('done', !!on); var cb=el.querySelector('input'); if(cb) cb.checked=!!on; }
+
+  document.querySelectorAll('.step').forEach(function(row){
+    var k=row.getAttribute('data-k'), cb=row.querySelector('input');
+    apply(row, state[k]);
+    row.addEventListener('click', function(e){
+      if(e.target.tagName==='A') return;
+      if(e.target!==cb) cb.checked=!cb.checked;
+      state[k]=cb.checked; apply(row, cb.checked); save();
+    });
+  });
+
+  document.querySelectorAll('.check').forEach(function(row){
+    var k=row.getAttribute('data-k'), cb=row.querySelector('input');
+    cb.checked=!!state[k]; row.classList.toggle('done', cb.checked);
+    cb.addEventListener('change', function(){ state[k]=cb.checked; row.classList.toggle('done', cb.checked); save(); });
+  });
+
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+  var btn=document.getElementById('copy-btn');
+  var text='Hi — 2022 Ford Bronco Sport, intelligent access proximity key, ALL keys lost. Fob is Ford 902 MHz M3N-A2C931426, part 164-R8182 — the common 4-button one shared with the 2020-22 Escape, NOT the rare full-size-Bronco fob. Car is in my driveway in Bella Vista, 72714, VIN 3FMCR9C68NRD69408, and it is unlocked. Do you stock that fob? Can you come out this afternoon — I need someone here between 1:00 and 2:00 PM, can you commit to a window? What\u2019s the out-the-door price \u2014 fob, blade cut, programming, and trip fee? And you\u2019ll erase all the old keys, right?';
+  btn.addEventListener('click', function(){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ btn.textContent=' Copied \u2713'; setTimeout(function(){ btn.textContent=' Copy script'; },2000); });
+    } else {
+      var ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); btn.textContent=' Copied \u2713'; }catch(e){ btn.textContent=' Press Ctrl+C'; }
+      setTimeout(function(){ btn.textContent=' Copy script'; },2000); document.body.removeChild(ta);
+    }
+  });
+
+  var topBtn=document.getElementById('top-btn');
+  window.addEventListener('scroll', function(){ topBtn.style.display = (window.scrollY>500) ? 'block' : 'none'; });
+  topBtn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>

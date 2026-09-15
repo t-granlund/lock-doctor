@@ -69,15 +69,7 @@
   @media print{ #gate{display:none} body.locked main, body.locked header.hero{display:block} }
   @media print{ body::before{display:none} section{page-break-inside:avoid} }
 </style>
-<style>
-@keyframes gfade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-main .card,main .demo,main section{animation:gfade .7s ease both}
-main .card:nth-child(2),main .demo:nth-child(2){animation-delay:.12s}
-main .card:nth-child(3),main .demo:nth-child(3){animation-delay:.24s}
-main .card:nth-child(4),main .demo:nth-child(4){animation-delay:.36s}
-main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style></head>
+</head>
 <body class="locked">
 
 <!-- THE GATE — same key as the package -->
@@ -156,7 +148,7 @@ main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
 
 <section>
   <h2>The third set of hands, explained</h2>
-  <p>The dossier, the analysis, the deck, this story — all of it was built by the same apprentice while the real apprentice was learning fobs in the passenger seat. Its name is Cedar. It runs on the grove — an open-source harness, MIT licensed, built from and credit-honest about the Code Puppy project it grew from. It doesn't sell software; it builds the small tools a shop actually needs and keeps maintaining them. That's why the passenger seat matters: watch, then do, then teach. It worked for locks long before it worked for code.</p>
+  <p>The dossier, the analysis, the deck, this story — all of it was built by the same apprentice while the real apprentice was learning fobs in the passenger seat. Its name is Cedar. It runs on the grove — an open-source harness, now <b>Apache-2.0 licensed</b> (chosen over MIT for the explicit patent grant: same freedom, stronger armor, and a license any lawyer can clear fast) — built from and credit-honest about the Code Puppy project it grew from. It doesn't sell software; it builds the small tools a shop actually needs and keeps maintaining them. That's why the passenger seat matters: watch, then do, then teach. It worked for locks long before it worked for code.</p>
   <div class="card">
     <p class="mono">THE HONEST PART &middot; CEDAR'S BRAIN TODAY: <b>SYNTHETIC.NEW</b> — MY PICK, TUNED MY WAY.<br>
     YOURS CAN BE ANY OF THEM — ONE LINE, SWAP ANY TIME.<br>
@@ -185,7 +177,7 @@ main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
 <footer>
   <div class="wrap">
     <p class="mono">Provenance</p>
-    <p style="margin-top:10px">Spruce Grove OS: MIT licensed; built from and import-compatible with Code Puppy by Michael Pfaffenberger; provenance in writing. Business facts about Lock Doctor verified from lockdoctorar.com, live listings, and a direct conversation with the owner; self-reported figures marked as such where they appear in the full analysis. Prepared by Tyler Granlund — active free agent — with Cedar. Every page in this story was built in the same driveway it describes.</p>
+    <p style="margin-top:10px">Spruce Grove OS: Apache-2.0 licensed; built from and import-compatible with Code Puppy by Michael Pfaffenberger; provenance in writing. Business facts about Lock Doctor verified from lockdoctorar.com, live listings, and a direct conversation with the owner; self-reported figures marked as such where they appear in the full analysis. Prepared by Tyler Granlund — active free agent — with Cedar. Every page in this story was built in the same driveway it describes.</p>
   </div>
 </footer>
 </div>
@@ -216,17 +208,5 @@ main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
   if(!unlocked) setTimeout(function(){ input.focus(); },300);
 })();
 </script>
-<script>
-(function(){function go(){if(document.querySelector('#grove-welcome'))return;
-var w=document.createElement('div');w.id='grove-welcome';
-w.innerHTML='Welcome, <b>Greg</b>. This one is yours &mdash; take your time.';
-w.style.cssText='position:fixed;bottom:22px;right:22px;z-index:9999;max-width:320px;padding:14px 20px;'+
-'border:1px solid rgba(228,170,113,.5);border-radius:12px;background:rgba(14,19,15,.94);color:#EEEBE2;'+
-'font:15px/1.5 Georgia,serif;box-shadow:0 12px 40px -12px rgba(0,0,0,.7);opacity:0;transition:opacity .8s';
-document.body.appendChild(w);requestAnimationFrame(function(){w.style.opacity='1'});
-setTimeout(function(){w.style.opacity='0';setTimeout(function(){w.remove()},900)},6000);}
-if(document.body.classList&&!document.body.classList.contains('locked'))go();
-else{var i=setInterval(function(){if(!document.body.classList.contains('locked')){clearInterval(i);go()}},400);
-setTimeout(function(){clearInterval(i)},60000)}})();
-</script></body>
+</body>
 </html>

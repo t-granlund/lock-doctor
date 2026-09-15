@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FPO — Lock Doctor, tomorrow — built by the grove</title>
+<style>
+  :root{--green:#173b2b;--green2:#225239;--brass:#c9a05a;--ink:#1c211e;--paper:#f7f4ec;--line:#e4e0d4;--red:#b3261e}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55}
+  .fpo-bar{background:var(--red);color:#fff;text-align:center;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;padding:6px 10px;font-weight:700}
+  .topbar{background:var(--green);color:#fff;padding:10px 18px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .brand{font-weight:800;letter-spacing:.02em;font-size:1.05rem;display:flex;align-items:center;gap:8px}
+  .brand .k{background:var(--brass);color:var(--green);border-radius:4px;padding:2px 7px;font-size:.62rem;letter-spacing:.14em;font-weight:800}
+  .topbar a{color:#fff;text-decoration:none;font-weight:700;font-size:.9rem}
+  .callbtn{background:var(--brass);color:var(--green);border-radius:8px;padding:8px 14px;font-weight:800}
+  .hoursline{background:#eef0e7;border-bottom:1px solid var(--line);text-align:center;font-size:.78rem;padding:6px 10px;color:#4a554c}
+  .hero{background:linear-gradient(135deg,var(--green) 0%,var(--green2) 70%);color:#fff;padding:52px 22px 44px;text-align:center}
+  .hero h1{font-size:clamp(1.8rem,4.5vw,3rem);line-height:1.1;max-width:760px;margin:0 auto 12px}
+  .hero p{max-width:620px;margin:0 auto 20px;color:#dfe8de}
+  .ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .ctas a{background:var(--brass);color:var(--green);font-weight:800;padding:13px 22px;border-radius:10px;text-decoration:none}
+  .ctas a.ghost{background:transparent;border:2px solid rgba(255,255,255,.5);color:#fff}
+  .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  .badge{border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:5px 14px;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#eef2ea}
+  .badge.hot{background:var(--brass);color:var(--green);border-color:var(--brass);font-weight:800}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+  .stat{background:#fff;padding:20px 10px;text-align:center}
+  .stat b{font-size:1.7rem;color:var(--green)}
+  .stat span{display:block;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#6b7568;margin-top:4px}
+  section{max-width:1020px;margin:0 auto;padding:40px 22px 8px}
+  h2{font-size:1.45rem;color:var(--green);margin-bottom:14px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:760px){.grid3{grid-template-columns:1fr}.stats{grid-template-columns:1fr}}
+  .svc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .svc b{color:var(--green)} .svc p{font-size:.86rem;color:#57604f;margin-top:4px}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.9rem}
+  th{background:var(--green);color:#fff;text-align:left;padding:10px 14px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+  td{padding:10px 14px;border-top:1px solid var(--line)}
+  td.price{font-weight:800;color:var(--green);white-space:nowrap}
+  .fpo{color:var(--red);font-weight:800;font-size:.62rem;letter-spacing:.1em;background:#fbe9e7;border-radius:4px;padding:2px 6px;vertical-align:middle}
+  .reviews{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:12px}
+  .rev{border-left:3px solid var(--brass);padding-left:14px}
+  .rev .who{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#6b7568}
+  .biglink{display:inline-block;margin-top:14px;background:var(--green);color:#fff;font-weight:800;padding:11px 18px;border-radius:10px;text-decoration:none}
+  .intake{background:var(--green);color:#fff;border-radius:14px;padding:22px;display:grid;gap:10px;max-width:560px;margin:0 auto}
+  .intake h3{font-size:1.1rem}
+  .intake input,.intake textarea{width:100%;border:none;border-radius:8px;padding:11px 12px;font-family:inherit;font-size:.9rem}
+  .intake button{background:var(--brass);border:none;color:var(--green);font-weight:800;border-radius:8px;padding:12px;font-size:.95rem;cursor:pointer}
+  .intake small{color:#cfdccf}
+  .areas{display:flex;flex-wrap:wrap;gap:8px}
+  .areas span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.8rem}
+  footer{background:var(--green);color:#dfe8de;margin-top:44px;padding:26px 22px;text-align:center;font-size:.82rem}
+  footer b{color:#fff}
+  .sticky-call{position:fixed;bottom:14px;left:14px;right:14px;display:none;justify-content:center}
+  @media(max-width:600px){.sticky-call{display:flex}}
+  .sticky-call a{background:var(--brass);color:var(--green);font-weight:800;padding:14px 30px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+</style>
+</head>
+<body>
+
+<div class="fpo-bar">FPO instance &middot; for placement only &middot; a working preview of tomorrow &middot; built by the grove</div>
+
+<div class="topbar">
+  <div class="brand">LOCK DOCTOR <span class="k">NASTF</span> <span class="k">AOLA</span></div>
+  <div style="display:flex;gap:16px;align-items:center">
+    <a href="#pricing">Pricing</a><a href="#reviews">Reviews</a><a href="#intake">After hours</a>
+    <a class="callbtn" href="tel:+14792707522">&#9742; (479) 270-7522</a>
+  </div>
+</div>
+<div class="hoursline">Mon&ndash;Sat 6:00 AM &ndash; 10:00 PM &middot; closed Sunday &middot; <b>24/6 emergency response</b> &middot; this line is the single source of truth &mdash; every listing matches it</div>
+
+<div class="hero">
+  <h1>Locked out? A real locksmith is already close.</h1>
+  <p>Mobile locksmith for homes, cars, and businesses across Northwest Arkansas &amp; Southwest Missouri &mdash; keys, fobs, rekeys, and the doors in between.</p>
+  <div class="ctas">
+    <a href="tel:+14792707522">&#9742; Call now &mdash; (479) 270-7522</a>
+    <a class="ghost" href="#intake">Not urgent? Leave a note</a>
+  </div>
+  <div class="badges">
+    <span class="badge hot">NASTF certified &mdash; OEM key origination</span>
+    <span class="badge">Licensed &amp; insured</span>
+    <span class="badge">22+ years</span>
+    <span class="badge">Five crew, one standard</span>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><b>15,200+</b><span>jobs completed*</span></div>
+  <div class="stat"><b>31 min</b><span>avg emergency response*</span></div>
+  <div class="stat"><b>201</b><span>five-star Google reviews*</span></div>
+</div>
+
+<section>
+  <h2>What we do, at a glance</h2>
+  <div class="grid3">
+    <div class="svc"><b>Emergency lockouts</b><p>Homes and vehicles, 24/6. Fast, careful, no damage.</p></div>
+    <div class="svc"><b>Automotive keys &amp; fobs</b><p>All-keys-lost origination, fob programming &mdash; no dealer visit, no towing.</p></div>
+    <div class="svc"><b>Rekey &amp; master keys</b><p>Move-ins, turnovers, and shops that need one key to rule the doors.</p></div>
+    <div class="svc"><b>Business &amp; safes</b><p>Commercial hardware, push-bars, safe work by AOLA technicians.</p></div>
+    <div class="svc"><b>Key cutting &amp; blanks</b><p>Precision-cut while you wait &mdash; and spares before you need them.</p></div>
+    <div class="svc"><b>Smart locks &amp; access</b><p>Keypads, smart deadbolts, and honest advice on what&rsquo;s worth your money.</p></div>
+  </div>
+</section>
+
+<section id="pricing">
+  <h2>Straight ranges, no phone tag</h2>
+  <p style="font-size:.88rem;color:#57604f;margin-bottom:14px">Every shop says &ldquo;call for pricing.&rdquo; Here are honest ranges instead &mdash; final quotes depend on the job, and you&rsquo;ll know before we start. <span class="fpo">FPO</span> = placeholder ranges for Greg to set.</p>
+  <table>
+    <tr><th>Common job</th><th>Range <span class="fpo">FPO</span></th><th>Notes</th></tr>
+    <tr><td>House / car lockout</td><td class="price">$75&ndash;$125 <span class="fpo">FPO</span></td><td>Daytime, within service area</td></tr>
+    <tr><td>Rekey a house (per lock)</td><td class="price">$20&ndash;$35 <span class="fpo">FPO</span></td><td>Move-in special available</td></tr>
+    <tr><td>New fob + programming</td><td class="price">$180&ndash;$320 <span class="fpo">FPO</span></td><td>Still less than a dealer + tow</td></tr>
+    <tr><td>All-keys-lost originate</td><td class="price">$250&ndash;$450 <span class="fpo">FPO</span></td><td>Blade cut, fob, old keys erased</td></tr>
+    <tr><td>Smart deadbolt install</td><td class="price">$150&ndash;$260 <span class="fpo">FPO</span></td><td>Hardware + labor</td></tr>
+  </table>
+</section>
+
+<section id="reviews">
+  <h2>What neighbors say &mdash; all of it, not a highlight reel</h2>
+  <div class="reviews">
+    <div class="rev"><p>&ldquo;I called at 11 p.m after trying every other option.&rdquo;</p><div class="who">Google review &middot; recent</div></div>
+    <div class="rev"><p>&ldquo;Showed up within the hour.&rdquo;</p><div class="who">Google review &middot; recent</div></div>
+    <a class="biglink" href="https://www.google.com/search?q=Lock+Doctor+Centerton+AR+reviews" target="_blank" rel="noopener">See every review on Google, unfiltered &rarr;</a>
+  </div>
+</section>
+
+<section id="intake">
+  <div class="intake">
+    <h3>It&rsquo;s after hours. We&rsquo;ve got you anyway.</h3>
+    <input type="text" placeholder="Your name" />
+    <input type="tel" placeholder="Callback number" />
+    <textarea rows="3" placeholder="What&rsquo;s going on? (address, vehicle, lock type)"></textarea>
+    <button>Send to tomorrow&rsquo;s first callback <span class="fpo" style="background:#fff">FPO</span></button>
+    <small>This note lands on the morning list &mdash; name, callback, and a drafted first response, before the first coffee.</small>
+  </div>
+</section>
+
+<section>
+  <h2>Where the van already goes</h2>
+  <div class="areas">
+    <span>Bentonville</span><span>Bella Vista</span><span>Centerton</span><span>Rogers</span><span>Pea Ridge</span><span>Cave Springs</span><span>Lowell</span><span>Gravette</span><span>Decatur</span><span>Springdale</span><span>Pineville MO</span><span>Anderson MO</span>
+  </div>
+</section>
+
+<footer>
+  <b>Lock Doctor</b> &middot; Centerton, Arkansas &middot; (479) 270-7522<br>
+  Mon&ndash;Sat 6:00 AM&ndash;10:00 PM &middot; closed Sunday &middot; 24/6 emergency line<br>
+  <span style="font-size:.72rem;opacity:.75">FPO preview &mdash; static, fast, owned. Built by the grove; maintained by the shop.</span>
+</footer>
+
+<div class="sticky-call"><a href="tel:+14792707522">&#9742; Call Lock Doctor</a></div>
+
+</body>
+</html>
