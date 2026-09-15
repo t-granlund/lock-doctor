@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>End-to-End Training — Say It, Watch It Build, Run With It · Spruce Grove OS</title>
-<link rel="icon" type="image/png" href="spruce-logos/spruce_grove_badge_ember.png">
+<link rel="icon" type="image/png" href="spruce-logos/spruce-core-disc-64.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600;9..144,800&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -65,15 +65,7 @@
   body.locked main{display:none}
   @media print{#gate{display:none}body.locked main{display:block}body::before{display:none}}
 </style>
-<style>
-@keyframes gfade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-main .card,main .demo,main section{animation:gfade .7s ease both}
-main .card:nth-child(2),main .demo:nth-child(2){animation-delay:.12s}
-main .card:nth-child(3),main .demo:nth-child(3){animation-delay:.24s}
-main .card:nth-child(4),main .demo:nth-child(4){animation-delay:.36s}
-main .card:nth-child(5),main .demo:nth-child(5){animation-delay:.48s}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style></head>
+</head>
 <body class="locked">
 
 <div id="gate">
@@ -220,17 +212,5 @@ uv run spruce-grove</pre>
   if(!unlocked) setTimeout(function(){ input.focus(); },300);
 })();
 </script>
-<script>
-(function(){function go(){if(document.querySelector('#grove-welcome'))return;
-var w=document.createElement('div');w.id='grove-welcome';
-w.innerHTML='Welcome, <b>Greg</b>. This one is yours &mdash; take your time.';
-w.style.cssText='position:fixed;bottom:22px;right:22px;z-index:9999;max-width:320px;padding:14px 20px;'+
-'border:1px solid rgba(228,170,113,.5);border-radius:12px;background:rgba(14,19,15,.94);color:#EEEBE2;'+
-'font:15px/1.5 Georgia,serif;box-shadow:0 12px 40px -12px rgba(0,0,0,.7);opacity:0;transition:opacity .8s';
-document.body.appendChild(w);requestAnimationFrame(function(){w.style.opacity='1'});
-setTimeout(function(){w.style.opacity='0';setTimeout(function(){w.remove()},900)},6000);}
-if(document.body.classList&&!document.body.classList.contains('locked'))go();
-else{var i=setInterval(function(){if(!document.body.classList.contains('locked')){clearInterval(i);go()}},400);
-setTimeout(function(){clearInterval(i)},60000)}})();
-</script></body>
+</body>
 </html>
