@@ -157,7 +157,7 @@
     <h2>Take everything. It&rsquo;s yours.</h2>
     <p class="lede" style="margin-bottom:14px">Click to view; right-click &rarr; Save As to keep a copy. Nothing here is a trial.</p>
     <div class="grid3">
-      <div class="card asset"><span class="kicker">private &middot; by text</span><h3>The dossier</h3><p class="dim" style="font-size:.82rem">Vehicle, situation, credentials — with ID imagery. That page travels by text, not by public link. This copy ships without it on purpose.</p></div>
+      <div class="card asset"><span class="kicker">document</span><h3>The dossier</h3><p class="dim" style="font-size:.82rem">Vehicle, situation, credentials — the page that got your Ford authorization moving.</p><a href="greg-dossier.html">Open &rarr;</a></div>
       <div class="card asset"><span class="kicker">document</span><h3>Business analysis</h3><p class="dim" style="font-size:.82rem">Your shop, read like a system: strengths, frictions, the grove fit, the honest math.</p><a href="lock-doctor-business-analysis.html">Open &rarr;</a></div>
       <div class="card asset"><span class="kicker">the explainer</span><h3>Your morning, written up</h3><p class="dim" style="font-size:.82rem">Keys and access, the wall, the plain answer — how this helps a shop like yours. Published behind your key.</p><a href="lock-doctor-story.html">Open &rarr;</a></div>
       <div class="card asset"><span class="kicker">website plan</span><h3>Today vs tomorrow</h3><p class="dim" style="font-size:.82rem">The live audit of lockdoctorar.com, the FPO previews, the agentic lifecycle, security &amp; analytics — the whole optimization plan.</p><a href="lock-doctor-website-plan.html">Open &rarr;</a></div>
@@ -292,14 +292,14 @@ uv run spruce-grove
       btn=document.getElementById('turn'), body=document.body;
 
   var unlocked=false;
-  try{ unlocked=sessionStorage.getItem('grove-handoff-key')===GATE_KEY; }catch(e){}
+  try{ unlocked=(sessionStorage.getItem('grove-handoff-key')||localStorage.getItem('grove-handoff-key'))===GATE_KEY; }catch(e){}
   if(unlocked){ body.classList.remove('locked'); gate.classList.add('open'); }
 
   function tryKey(){
     var v=(input.value||'').trim().toLowerCase();
     if(v===GATE_KEY){
       msg.textContent='Pin set. Welcome to the grove.';
-      try{ sessionStorage.setItem('grove-handoff-key',GATE_KEY); }catch(e){}
+      try{ sessionStorage.setItem('grove-handoff-key',GATE_KEY); localStorage.setItem('grove-handoff-key',GATE_KEY); }catch(e){}
       setTimeout(function(){ body.classList.remove('locked'); gate.classList.add('open'); },450);
     } else {
       msg.textContent='Not this key. (Lost it? Text Tyler.)';

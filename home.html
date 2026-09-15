@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>The Handoff — everything, one glance · Lock Doctor</title>
+<link rel="icon" type="image/png" href="spruce-logos/spruce_grove_badge_ember.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600;9..144,800&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:radial-gradient(900px 460px at 20% -6%,rgba(88,143,94,.15),transparent 60%),radial-gradient(800px 420px at 95% 106%,rgba(210,160,105,.1),transparent 60%),#1d211e;
+    color:#d6d2c8;line-height:1.55;min-height:100vh}
+  .wrap{max-width:860px;margin:0 auto;padding:44px 20px 60px}
+  .kicker{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.24em;font-size:.6rem;color:#588f5e}
+  .kicker.ember{color:#d2a069}
+  h1{font-family:'Fraunces',serif;font-weight:600;color:#f0e1c8;font-size:2rem;line-height:1.15;margin:12px 0 8px}
+  .lede{font-size:.95rem;color:rgba(214,210,200,.75);margin-bottom:28px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+  a.tile{display:block;text-decoration:none;background:rgba(45,79,58,.16);border:1px solid rgba(240,225,200,.14);border-radius:16px;padding:18px 18px 16px;transition:transform .15s ease,border-color .15s ease}
+  a.tile:hover{transform:translateY(-2px);border-color:rgba(210,160,105,.5)}
+  a.tile .k{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.18em;font-size:.56rem;color:#588f5e;display:block;margin-bottom:7px}
+  a.tile .t{font-family:'Fraunces',serif;font-weight:600;color:#f0e1c8;font-size:1.06rem;display:block;margin-bottom:4px}
+  a.tile .d{font-size:.8rem;color:rgba(214,210,200,.62)}
+  a.tile.muted{opacity:.55;border-style:dashed}
+  a.tile.muted .k{color:#d2a069}
+  .foot{margin-top:34px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(214,210,200,.4)}
+  /* gate */
+  #gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:radial-gradient(700px 420px at 50% 30%,rgba(45,79,58,.5),transparent 70%),#1d211e;transition:opacity .6s ease,visibility 0s .6s}
+  #gate.open{opacity:0;visibility:hidden}
+  .gatebox{text-align:center;max-width:400px;padding:20px;width:100%}
+  .gatebox .g{width:74px;margin:0 auto 18px;display:block;opacity:.92}
+  .gatebox input{width:100%;font-family:'JetBrains Mono',monospace;font-size:1.3rem;letter-spacing:.42em;text-align:center;text-transform:uppercase;background:rgba(29,33,30,.9);color:#f0e1c8;border:1px solid rgba(240,225,200,.18);border-radius:14px;padding:15px 8px;outline:none;margin-top:22px}
+  .gatebox input:focus{border-color:#d2a069}
+  .gatebox button{width:100%;margin-top:12px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.18em;font-size:.8rem;font-weight:700;color:#1d211e;background:#d2a069;border:none;border-radius:14px;padding:16px;cursor:pointer}
+  .gate-msg{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;margin-top:14px;min-height:1.2em;color:#d2a069}
+  .shake{animation:shake .4s}@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+  .hintline{font-size:.82rem;color:rgba(214,210,200,.5);margin-top:14px}
+  body.locked .wrap{display:none}
+</style>
+</head>
+<body class="">
+
+<div id="gate">
+  <div class="gatebox" id="gatebox">
+    <svg class="g" viewBox="0 0 268 160" aria-hidden="true"><g fill="#F2EDE0"><path d="M35.2 84.6 67.2 140 3.2 140Z"/><path d="M129 50.2 180.8 140 77.2 140Z"/><path d="M222.8 84.6 254.8 140 190.8 140Z"/><rect x="3.2" y="148" width="261.6" height="6"/></g></svg>
+    <div class="kicker ember">The handoff &middot; cut for Lock Doctor</div>
+    <h1 style="font-size:1.7rem">One key turns it.</h1>
+    <input id="key" type="password" maxlength="12" autocomplete="off" placeholder="&bull;&bull;&bull;&bull;&bull;" aria-label="Key">
+    <button id="turn">Unlock</button>
+    <div class="gate-msg" id="msg"></div>
+    <p class="hintline">The blade that starts the Bronco — five characters, starts with H.</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="kicker">The handoff &middot; everything, one glance</div>
+  <h1>Greg — it&rsquo;s all yours.</h1>
+  <p class="lede">Read in any order. Own all of it.</p>
+
+  <div class="grid">
+    <a class="tile" href="lock-doctor-story.html"><span class="k">The story</span><span class="t">Your morning, written up</span><span class="d">Keys and access, the wall, the plain answer.</span></a>
+    <a class="tile" href="lock-doctor-website-plan.html"><span class="k">The insight</span><span class="t">Your website, today vs tomorrow</span><span class="d">The live audit — and what it becomes.</span></a>
+    <a class="tile" href="lockdoctor-fpo.html"><span class="k">The future site</span><span class="t">Tomorrow&rsquo;s website, working</span><span class="d">Clickable. FPO numbers await your pen.</span></a>
+    <a class="tile" href="spruce-grove-training.html"><span class="k">Training</span><span class="t">Say it, watch it build</span><span class="d">The loop, end to end — with the voice note summarized.</span></a>
+    <a class="tile" href="greg-handoff.html"><span class="k">The letter</span><span class="t">The full handoff</span><span class="d">Every detail: tools, install, crew, the invite.</span></a>
+    <a class="tile" href="lock-doctor-presentation.html"><span class="k">The deck</span><span class="t">Every lock has a key</span><span class="d">The story you watched in the driveway.</span></a>
+    <a class="tile" href="lock-doctor-business-analysis.html"><span class="k">The analysis</span><span class="t">Your shop, read like a system</span><span class="d">Strengths, friction, the honest math.</span></a>
+    <a class="tile" href="bronco-key-final-action-plan.html"><span class="k">The originate</span><span class="t">Bronco key plan</span><span class="d">The job your crew finished today, documented.</span></a>
+    <a class="tile" href="lockdoctors-usecase-thehowithelps.m4a"><span class="k">The voice note</span><span class="t">This morning, unedited</span><span class="d">Two minutes of thinking out loud.</span></a>
+    <a class="tile muted" href="greg-handoff.html#assets"><span class="k">Brand kit</span><span class="t">Marks &amp; logos</span><span class="d">Yours — in the letter, under assets.</span></a>
+    <a class="tile muted" href="greg-handoff.html#privacy"><span class="k">Private</span><span class="t">The dossier</span><span class="d">ID imagery — travels by text, not by link.</span></a>
+  </div>
+
+  <div class="foot">No pitch &middot; no invoice &middot; no ask &middot; Tyler &middot; spruce grove os &middot; anno 1727</div>
+</div>
+
+<script>
+(function(){
+  var GATE_KEY='hu101';
+  var gate=document.getElementById('gate'), box=document.getElementById('gatebox'),
+      input=document.getElementById('key'), msg=document.getElementById('msg'),
+      btn=document.getElementById('turn'), body=document.body;
+  var unlocked=false;
+  try{ unlocked=(sessionStorage.getItem('grove-handoff-key')||localStorage.getItem('grove-handoff-key'))===GATE_KEY; }catch(e){}
+  if(unlocked){ gate.classList.add('open'); } else { body.classList.add('locked'); }
+  function tryKey(){
+    var v=(input.value||'').trim().toLowerCase();
+    if(v===GATE_KEY){
+      msg.textContent='Pin set. Welcome to the grove.';
+      try{ sessionStorage.setItem('grove-handoff-key',GATE_KEY); localStorage.setItem('grove-handoff-key',GATE_KEY); }catch(e){}
+      setTimeout(function(){ body.classList.remove('locked'); gate.classList.add('open'); },420);
+    } else {
+      msg.textContent='Not this key.';
+      box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+      input.value=''; input.focus();
+    }
+  }
+  btn.addEventListener('click',tryKey);
+  input.addEventListener('keydown',function(e){ if(e.key==='Enter') tryKey(); });
+  if(!unlocked) setTimeout(function(){ input.focus(); },300);
+})();
+</script>
+</body>
+</html>
